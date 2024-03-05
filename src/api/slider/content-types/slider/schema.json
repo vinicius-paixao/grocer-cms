@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sliders",
+  "info": {
+    "singularName": "slider",
+    "pluralName": "sliders",
+    "displayName": "slider",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "banner": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.banner"
+    },
+    "active": {
+      "type": "boolean",
+      "default": false
+    },
+    "pagination": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "arrows": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "infinite": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "show_title": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "background": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

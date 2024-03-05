@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_ui_banners",
+  "info": {
+    "displayName": "banner",
+    "icon": "layout",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "active": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "destiny": {
+      "type": "string"
+    },
+    "start": {
+      "type": "datetime"
+    },
+    "finish": {
+      "type": "datetime"
+    },
+    "source": {
+      "type": "string"
+    }
+  }
+}
