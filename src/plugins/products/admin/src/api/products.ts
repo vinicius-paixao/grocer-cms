@@ -1,6 +1,6 @@
 import { request } from "@strapi/helper-plugin";
 
-export const categoriesRequest = {
+export const productsRequest = {
   getAllProducts: async () => {
     return await request('/products/allProducts', {
       method: 'GET'
