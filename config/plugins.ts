@@ -15,9 +15,9 @@ export default () => ({
     enabled: true,
     resolve: './src/plugins/contract-accounts'
   },
-  'product-collection': {
+  'products': {
     enabled: true,
-    resolve: './src/plugins/product-collection'
+    resolve: './src/plugins/products'
   },
   "public-permissions": {
     enabled: true,
@@ -35,7 +35,7 @@ export default () => ({
         'users-permissions.categories': [],
         'users-permissions.login': [],
         'users-permissions.contract-accounts': [],
-        'users-permissions.product-collection': [],
+        'users-permissions.products': [],
       },
     },
   },

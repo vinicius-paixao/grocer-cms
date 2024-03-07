@@ -1,16 +1,16 @@
 export default [
   {
     method: 'GET',
-    path: '/products',
-    handler: 'productCollectionController.findAll',
+    path: '/allProducts',
+    handler: 'productsController.findAll',
     config: {
       policies: [],
     },
   },
   {
     method: 'GET',
-    path: '/products/:id',
-    handler: 'productCollectionController.findOne',
+    path: '/oneProduct/:id',
+    handler: 'productsController.findOne',
     config: {
       policies: [],
     },
@@ -18,7 +18,7 @@ export default [
   {
     method: 'GET',
     path: '/search/:name',
-    handler: 'productCollectionController.findByName',
+    handler: 'productsController.findByName',
     config: {
       policies: [],
     },
@@ -26,7 +26,7 @@ export default [
   {
     method: 'POST',
     path: '/productsCreate',
-    handler: 'productCollectionController.create',
+    handler: 'productsController.create',
     config: {
       policies: [],
     },
@@ -34,7 +34,7 @@ export default [
   {
     method: 'PUT',
     path: '/productsUpdate/:id',
-    handler: 'productCollectionController.update',
+    handler: 'productsController.update',
     config: {
       policies: [],
     },
@@ -42,7 +42,7 @@ export default [
   {
     method: 'PATCH',
     path: '/updateFieldEnable/:id',
-    handler: 'productCollectionController.updateFieldEnable',
+    handler: 'productsController.updateFieldEnable',
     config: {
       policies: [],
     },
@@ -50,7 +50,7 @@ export default [
   {
     method: 'PATCH',
     path: '/updateFieldDesable/:id',
-    handler: 'productCollectionController.updateFieldDesable',
+    handler: 'productsController.updateFieldDesable',
     config: {
       policies: [],
     },
@@ -58,7 +58,7 @@ export default [
   {
     method: 'DELETE',
     path: '/deleteProduct/:id',
-    handler: 'productCollectionController.delete',
+    handler: 'productsController.delete',
     config: {
       policies: [],
     },
