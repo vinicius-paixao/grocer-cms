@@ -15,6 +15,10 @@ export default () => ({
     enabled: true,
     resolve: './src/plugins/contract-accounts'
   },
+  'stocks': {
+    enabled: true,
+    resolve: './src/plugins/stocks'
+  },
   'users': {
     enabled: true,
     resolve: './src/plugins/users'
@@ -35,6 +39,7 @@ export default () => ({
         'users-permissions.categories': [],
         'users-permissions.login': [],
         'users-permissions.contract-accounts': [],
+        'users-permissions.stocks': [],
         'users-permissions.users': [],
       },
     },
