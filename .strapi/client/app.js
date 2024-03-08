@@ -10,6 +10,10 @@ import brands from "../../src/plugins/brands/strapi-admin";
 import categories from "../../src/plugins/categories/strapi-admin";
 import login from "../../src/plugins/login/strapi-admin";
 import contractAccounts from "../../src/plugins/contract-accounts/strapi-admin";
+import products from "../../src/plugins/products/strapi-admin";
+import salesChannels from "../../src/plugins/sales-channels/strapi-admin";
+import stocks from "../../src/plugins/stocks/strapi-admin";
+import users from "../../src/plugins/users/strapi-admin";
 import { renderAdmin } from "@strapi/strapi/admin";
 
 renderAdmin(document.getElementById("strapi"), {
@@ -22,5 +26,9 @@ renderAdmin(document.getElementById("strapi"), {
     categories: categories,
     login: login,
     "contract-accounts": contractAccounts,
+    products: products,
+    "sales-channels": salesChannels,
+    stocks: stocks,
+    users: users,
   },
 });
