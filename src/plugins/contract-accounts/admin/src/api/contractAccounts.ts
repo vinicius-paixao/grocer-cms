@@ -1,6 +1,6 @@
 import { request } from "@strapi/helper-plugin";
 
-export const categoriesRequest = {
+export const contractAccountsRequest = {
   getAllContracts: async () => {
     return await request('/contract-accounts/contract', {
       method: 'GET'
