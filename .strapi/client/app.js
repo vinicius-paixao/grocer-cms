@@ -5,7 +5,6 @@
 import strapiCloud from "@strapi/plugin-cloud/strapi-admin";
 import i18N from "@strapi/plugin-i18n/strapi-admin";
 import usersPermissions from "@strapi/plugin-users-permissions/strapi-admin";
-import publicPermissions from "strapi-plugin-public-permissions/strapi-admin";
 import brands from "../../src/plugins/brands/strapi-admin";
 import categories from "../../src/plugins/categories/strapi-admin";
 import login from "../../src/plugins/login/strapi-admin";
@@ -21,7 +20,6 @@ renderAdmin(document.getElementById("strapi"), {
     "strapi-cloud": strapiCloud,
     i18n: i18N,
     "users-permissions": usersPermissions,
-    "public-permissions": publicPermissions,
     brands: brands,
     categories: categories,
     login: login,
