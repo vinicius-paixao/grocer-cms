@@ -6,12 +6,12 @@
 
 import React from 'react';
 import pluginId from '../../pluginId';
+import Products from './products'
 
 const HomePage = () => {
   return (
     <div>
-      <h1>{pluginId}&apos;s HomePage</h1>
-      <p>Happy coding</p>
+      <Products />
     </div>
   );
 };
