@@ -1,18 +1,9 @@
-/*
- *
- * HomePage
- *
- */
 
-import React from 'react';
-import pluginId from '../../pluginId';
+import Login from './Login';
 
 const HomePage = () => {
   return (
-    <div>
-      <h1>{pluginId}&apos;s HomePage</h1>
-      <p>Happy coding</p>
-    </div>
+    <Login/>
   );
 };
 
