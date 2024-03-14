@@ -17,6 +17,7 @@ import {
   NumberInput,
   ToggleInput,
 } from "@strapi/design-system";
+import { productsRequest } from "../../api/products";
 
 export default function TodoTable({
   productEdit,
@@ -24,35 +25,37 @@ export default function TodoTable({
   backToProduct,
 }: any) {
   const [productFilter, setProductFilter] = useState({} as any);
-  const [isplayInSite, setIsplayInSite] = useState(
-    productFilter?.displayInSite
-  );
-  const [displayInSoldOut, setDisplayInSoldOut] = useState(
-    productFilter?.displayInSoldOut
-  );
+  const [updateProduct, setUpdateProduct] = useState({} as any);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // const body = {
-    //   name,
-    //   description,
-    //   title,
-    //   punctuation,
-    //   similarTerms,
-    // };
+    const mergedProduct = { ...productFilter, ...updateProduct };
 
-    // console.log({ body });
+    // Verifica se algum campo foi editado
+    const hasChanges = Object.keys(updateProduct).some(
+      (key) => updateProduct[key] !== productFilter[key]
+    );
 
-    // try {
-    //   const allbrands = await brandsRequest.setBrands(body);
-    //   console.log("post");
-    //   console.log(allbrands);
-    //   setShowModal(false);
-    // } catch (e) {
-    //   console.log("error", e);
-    // }
+    if (!hasChanges) {
+      console.log("Nenhuma alteração detectada.");
+      return;
+    }
+
+    console.log({ mergedProduct });
+
+    try {
+      const allbrands = await productsRequest.updateProduct(
+        mergedProduct,
+        productId
+      );
+      console.log("post");
+      console.log(allbrands);
+      // setShowModal(false);
+    } catch (e) {
+      console.log("error", e);
+    }
   };
 
   const getError = () => {
@@ -79,7 +82,7 @@ export default function TodoTable({
         title: filter?.title,
         shortDescription: filter?.shortDescription,
         longDescription: filter?.longDescription,
-        brandId: filter?.brand?.id,
+        brandId: filter?.brandId,
         categoryId: filter?.categoryId,
         commercialPoliticId: filter?.commercialPoliticId,
         displayInSite: filter?.displayInSite,
@@ -187,8 +190,10 @@ export default function TodoTable({
           name="text"
           hint="Max 40 characters"
           error={getError()}
-          onChange={(e: any) => console.log(e.target.value)}
-          value={productFilter?.name}
+          onChange={(e: any) =>
+            setUpdateProduct({ ...updateProduct, name: e.target.value })
+          }
+          value={updateProduct.name || productFilter?.name}
         />
       </Flex>
 
@@ -207,8 +212,10 @@ export default function TodoTable({
           name="text"
           hint="Max 40 characters"
           error={getError()}
-          onChange={(e: any) => console.log(e.target.value)}
-          value={productFilter?.slug}
+          onChange={(e: any) =>
+            setUpdateProduct({ ...updateProduct, slug: e.target.value })
+          }
+          value={productFilter?.slug || updateProduct.slug}
         />
       </Flex>
 
@@ -227,8 +234,10 @@ export default function TodoTable({
           name="text"
           hint="Max 40 characters"
           error={getError()}
-          onChange={(e: any) => console.log(e.target.value)}
-          value={productFilter?.title}
+          onChange={(e: any) =>
+            setUpdateProduct({ ...updateProduct, title: e.target.value })
+          }
+          value={productFilter?.title || updateProduct.title}
         />
       </Flex>
 
@@ -247,8 +256,15 @@ export default function TodoTable({
           name="text"
           hint="Max 40 characters"
           error={getError()}
-          onChange={(e: any) => console.log(e.target.value)}
-          value={productFilter?.shortDescription}
+          onChange={(e: any) =>
+            setUpdateProduct({
+              ...updateProduct,
+              shortDescription: e.target.value,
+            })
+          }
+          value={
+            productFilter?.shortDescription || updateProduct.shortDescription
+          }
         />
       </Flex>
 
@@ -267,8 +283,15 @@ export default function TodoTable({
           name="text"
           hint="Max 40 characters"
           error={getError()}
-          onChange={(e: any) => console.log(e.target.value)}
-          value={productFilter?.longDescription}
+          onChange={(e: any) =>
+            setUpdateProduct({
+              ...updateProduct,
+              longDescription: e.target.value,
+            })
+          }
+          value={
+            productFilter?.longDescription || updateProduct.longDescription
+          }
         />
       </Flex>
 
@@ -285,10 +308,18 @@ export default function TodoTable({
           aria-label="Enabled"
           onLabel="True"
           offLabel="False"
-          checked={isplayInSite}
-          onChange={(e: any) => setIsplayInSite(e.target.checked)}
+          checked={
+            updateProduct.displayInSite !== undefined
+              ? updateProduct.displayInSite
+              : productFilter?.displayInSite
+          }
+          onChange={(e: any) =>
+            setUpdateProduct({
+              ...updateProduct,
+              displayInSite: e.target.checked,
+            })
+          }
         />
-        ;
       </Flex>
 
       <Flex gap={"50px"} maxWidth="500px" marginTop="20px">
@@ -300,8 +331,17 @@ export default function TodoTable({
           aria-label="Enabled"
           onLabel="True"
           offLabel="False"
-          checked={displayInSoldOut}
-          onChange={(e: any) => setDisplayInSoldOut(e.target.checked)}
+          checked={
+            updateProduct.displayInSoldOut !== undefined
+              ? updateProduct.displayInSoldOut
+              : productFilter?.displayInSoldOut
+          }
+          onChange={(e: any) =>
+            setUpdateProduct({
+              ...updateProduct,
+              displayInSoldOut: e.target.checked,
+            })
+          }
         />
       </Flex>
 
@@ -319,7 +359,9 @@ export default function TodoTable({
           aria-label="punctuation"
           name="Punctuation"
           error={undefined}
-          onValueChange={(value: number) => console.log(value)}
+          onValueChange={(value: number) =>
+            setUpdateProduct({ ...updateProduct, punctuation: value })
+          }
           value={productFilter?.punctuation}
         />
       </Flex>
@@ -330,13 +372,7 @@ export default function TodoTable({
         maxWidth="500px"
         marginTop="50px"
       >
-        <Button
-          onClick={() => {
-            console.log("saved");
-          }}
-        >
-          Save
-        </Button>
+        <Button onClick={handleSubmit}>Save</Button>
         <Button variant={"tertiary"} onClick={backToProduct}>
           back
         </Button>

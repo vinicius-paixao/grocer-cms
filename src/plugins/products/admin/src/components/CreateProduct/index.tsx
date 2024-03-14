@@ -3,47 +3,66 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Typography,
-  VisuallyHidden,
-  Table,
-  Thead,
-  TFooter,
-  Tbody,
-  Tr,
-  Td,
-  Th,
   Flex,
   TextInput,
-  NumberInput,
+  SimpleMenu,
+  MenuItem,
+  Typography,
   ToggleInput,
 } from "@strapi/design-system";
+import { productsRequest } from "../../api/products";
+import { brandsRequest } from "../../../../../brands/admin/src/api/brands";
+import { categoriesRequest } from "../../../../../categories/admin/src/api/categories";
 
-export default function TodoTable({backToProduct}: any) {
+export default function TodoTable({ backToProduct }: any) {
   const [createProduct, setCreateProduct] = useState({} as any);
+  const [allBrands, setAllBrands] = useState([]);
+  const [allCategoryes, setAllCategoryes] = useState([]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // const body = {
-    //   name,
-    //   description,
-    //   title,
-    //   punctuation,
-    //   similarTerms,
-    // };
+    const body = { ...createProduct };
 
-    // console.log({ body });
-
-    // try {
-    //   const allbrands = await brandsRequest.setBrands(body);
-    //   console.log("post");
-    //   console.log(allbrands);
-    //   setShowModal(false);
-    // } catch (e) {
-    //   console.log("error", e);
-    // }
+    try {
+      const createProduct = await productsRequest.setProduct(body);
+      console.log("post");
+      console.log(createProduct);
+      // setShowModal(false);
+    } catch (e) {
+      console.log("error", e);
+    }
   };
+
+  const fetchData = async () => {
+    try {
+      const allbrands = await brandsRequest.getAllBrands();
+      console.log("dasdasd");
+      console.log(allBrands);
+
+      setAllBrands(allbrands);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
+  const fetchCategoryes = async () => {
+    try {
+      const allCategoryes = await categoriesRequest.getAllCategories();
+      console.log("dasdasd");
+      console.log(allCategoryes);
+
+      setAllCategoryes(allCategoryes);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchCategoryes();
+  }, []);
 
   const getError = () => {
     // if (name?.length > 40) {
@@ -152,21 +171,27 @@ export default function TodoTable({backToProduct}: any) {
       </Flex>
 
       <Flex maxWidth="1000px" marginTop="20px">
-        <TextInput
-          placeholder="brandId"
-          label="brandId"
-          name="text"
-          hint="Max 40 characters"
-          error={getError()}
-          onChange={(e: any) =>
-            setCreateProduct({ ...createProduct, brandId: e.target.value })
-          }
-          value={createProduct.brandId}
-        />
+        <Typography variant="delta" textColor="neutral800">
+          brandId:
+        </Typography>
+
+        <SimpleMenu id="label" label={createProduct?.brandId}>
+          {allBrands?.map((brand: any) => (
+            <MenuItem
+              key={brand}
+              id="menuItem-January"
+              onClick={() =>
+                setCreateProduct({ ...createProduct, brandId: brand.id })
+              }
+            >
+              {brand.id}
+            </MenuItem>
+          ))}
+        </SimpleMenu>
       </Flex>
 
       <Flex maxWidth="1000px" marginTop="20px">
-        <TextInput
+        {/* <TextInput
           placeholder="categoryId"
           label="categoryId"
           name="text"
@@ -176,10 +201,32 @@ export default function TodoTable({backToProduct}: any) {
             setCreateProduct({ ...createProduct, categoryId: e.target.value })
           }
           value={createProduct.categoryId}
-        />
+        /> */}
+
+        <Typography variant="delta" textColor="neutral800">
+          categoryId:
+        </Typography>
+
+        <SimpleMenu id="label" label={createProduct?.categoryId}>
+          {allCategoryes?.map((categorye: any) => (
+            <MenuItem
+              key={categorye}
+              id="menuItem-January"
+              onClick={() =>
+                setCreateProduct({
+                  ...createProduct,
+                  categoryId: categorye.id,
+                  commercialPoliticId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                })
+              }
+            >
+              {categorye.id}
+            </MenuItem>
+          ))}
+        </SimpleMenu>
       </Flex>
 
-      <Flex maxWidth="1000px" marginTop="20px">
+      {/* <Flex maxWidth="1000px" marginTop="20px">
         <TextInput
           placeholder="commercialPoliticId"
           label="commercialPoliticId"
@@ -194,39 +241,41 @@ export default function TodoTable({backToProduct}: any) {
           }
           value={createProduct.commercialPoliticId}
         />
-      </Flex>
+      </Flex> */}
 
       <Flex maxWidth="1000px" marginTop="20px">
-        <TextInput
-          placeholder="displayInSite"
-          label="displayInSite"
-          name="text"
-          hint="Max 40 characters"
-          error={getError()}
+      <Typography variant="delta" textColor="neutral800">
+          displayInSite
+        </Typography>
+        <ToggleInput
+          aria-label="Enabled"
+          onLabel="True"
+          offLabel="False"
+          checked={createProduct.displayInSoldOut}
           onChange={(e: any) =>
             setCreateProduct({
               ...createProduct,
-              displayInSite: e.target.value,
+              displayInSoldOut: e.target.checked,
             })
           }
-          value={createProduct.displayInSite}
         />
       </Flex>
 
       <Flex maxWidth="1000px" marginTop="20px">
-        <TextInput
-          placeholder="displayInSoldOut"
-          label="displayInSoldOut"
-          name="text"
-          hint="Max 40 characters"
-          error={getError()}
+        <Typography variant="delta" textColor="neutral800">
+          displayInSite
+        </Typography>
+        <ToggleInput
+          aria-label="Enabled"
+          onLabel="True"
+          offLabel="False"
+          checked={createProduct.displayInSite}
           onChange={(e: any) =>
             setCreateProduct({
               ...createProduct,
-              displayInSoldOut: e.target.value,
+              displayInSite: e.target.checked,
             })
           }
-          value={createProduct.displayInSoldOut}
         />
       </Flex>
 
@@ -264,17 +313,8 @@ export default function TodoTable({backToProduct}: any) {
         maxWidth="500px"
         marginTop="20px"
       >
-        <Button
-          onClick={() => {
-            console.log("saved");
-          }}
-        >
-          send
-        </Button>
-        <Button
-          variant={"tertiary"}
-          onClick={backToProduct}
-        >
+        <Button onClick={handleSubmit}>send</Button>
+        <Button variant={"tertiary"} onClick={backToProduct}>
           back
         </Button>
       </Flex>

@@ -17,7 +17,7 @@ import ProductsTable from "../../components/ProductsTable";
 import EditProduct from "../../components/EditProduct";
 import CreateProduct from "../../components/CreateProduct";
 // import BrandModal from "../../components/BrandModal";
-// import { brandsRequest } from "../../api/brands";
+import { productsRequest } from "../../api/products";
 // import BrandModalUpdate from "../../components/BrandModalUpdate";
 // import { ProductCollectionModal } from "../../components/ProductCollectionModal";
 // import { useProductCollection } from "../../context/ProductCollectionContext";
@@ -26,26 +26,26 @@ import CreateProduct from "../../components/CreateProduct";
 const Products: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  // const [allBrands, setAllBrands] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [productId, setProductId] = useState("");
   const [editProduct, setEditProduct] = useState(false);
   const [createProducts, setCreateProducts] = useState(false);
 
-  // const fetchData = async () => {
-  //   try {
-  //     const allbrands = await brandsRequest.getAllBrands();
-  //     console.log("dasdasd");
-  //     console.log(allBrands);
+  const fetchData = async () => {
+    try {
+      const allProducts = await productsRequest.getAllProducts();
+      console.log("dasdasd");
+      console.log(allProducts);
 
-  //     setAllBrands(allbrands);
-  //   } catch (e) {
-  //     console.log("error", e);
-  //   }
-  // };
+      setAllProducts(allProducts);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   // console.log({ allBrands });
 
@@ -76,51 +76,6 @@ const Products: FC = () => {
     setCreateProducts(!createProducts);
   }
 
-  const data = [
-    {
-      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      contractAccountId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      name: "string",
-      similarTerms: "string",
-      slug: "string",
-      title: "string",
-      shortDescription: "string",
-      longDescription: "string",
-      brandId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      brand: {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        contractAccountId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        name: "string",
-        title: "string",
-        description: "string",
-        punctuation: 0,
-        similarTerms: "string",
-        active: true,
-      },
-      categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      category: {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        contractAccountId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        name: "string",
-        title: "string",
-        description: "string",
-        parentCategoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        parentCategory: "string",
-        similarTerms: "string",
-        active: true,
-      },
-      commercialPoliticId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      displayInSite: true,
-      displayInSoldOut: true,
-      fiscalCode: "string",
-      punctuation: 0,
-      createdAt: "2024-03-11T12:56:53.209Z",
-      updatedAt: "2024-03-11T12:56:53.209Z",
-      approvedByUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      active: true,
-    },
-  ];
-
   return (
     <Layout>
       {/* {showModal && <BrandModal setShowModal={setShowModal} />}
@@ -133,19 +88,19 @@ const Products: FC = () => {
         as="h2"
       />
       <ContentLayout>
-        {data?.length > 0 ? (
+        {allProducts?.length > 0 ? (
           <Box padding={8} background="primary100">
             {editProduct ? (
               <EditProduct
                 productId={productId}
-                productEdit={data}
+                productEdit={allProducts}
                 backToProduct={productEdit}
               />
             ) : createProducts ? (
-              <CreateProduct backToProduct={handleCreate}/>
+              <CreateProduct backToProduct={handleCreate} />
             ) : (
               <ProductsTable
-                productsData={data}
+                productsData={allProducts}
                 setShowModal={setShowModal}
                 setShowUpdateModal={setShowUpdateModal}
                 // toggleTodo={toggleTodo}

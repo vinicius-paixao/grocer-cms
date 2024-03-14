@@ -15,6 +15,7 @@ import {
   Flex
 } from "@strapi/design-system";
 import { SimpleMenu, MenuItem } from "@strapi/design-system/v2";
+import { productsRequest } from "../../api/products";
 
 export default function TodoTable({
   productsData,
@@ -25,6 +26,19 @@ export default function TodoTable({
   setShowUpdateModal,
   createProducts
 }: any) {
+
+  const handleSubmit = async (productId: string) => {
+
+    try {
+      const deletePrdict = await productsRequest.deleteProduct(productId);
+      console.log("post");
+      console.log(deletePrdict);
+      // setShowModal(false);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
   return (
     <Box
       background="neutral0"
@@ -51,7 +65,7 @@ export default function TodoTable({
             </Th>
 
             <Th>
-              <Typography variant="sigma">Brands</Typography>
+              <Typography variant="sigma">Slug</Typography>
             </Th>
 
             <Th>
@@ -84,7 +98,7 @@ export default function TodoTable({
 
                 <Td>
                   <Typography textColor="neutral800">
-                    {product?.brand?.name}
+                    {product?.slug}
                   </Typography>
                 </Td>
 
@@ -95,7 +109,7 @@ export default function TodoTable({
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {product?.updatedAt}
+                    {product?.createdAt}
                   </Typography>
                 </Td>
 
@@ -121,7 +135,7 @@ export default function TodoTable({
                     </MenuItem> */}
                     <MenuItem
                       color="danger600"
-                      onSelect={() => console.log("delete")}
+                      onSelect={() => handleSubmit(product?.id)}
                     >
                       Delete
                     </MenuItem>
