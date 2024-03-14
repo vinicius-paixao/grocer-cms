@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import {
   ModalLayout,
   ModalHeader,
@@ -8,45 +7,35 @@ import {
   Typography,
   Button,
   TextInput,
-  // NumberInput,
 } from "@strapi/design-system";
 import { contractAccountsRequest } from "../../api/contractAccounts";
 
 export default function TodoModal({ setShowModal, addTodo }: any) {
-  const [name, setName] = useState("");
-  const [userId, setUserId] = useState("");
-  // const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [punctuation, setPunctuation] = useState<number>(0);
-  // const [similarTerms, setSimilarTerms] = useState("");
+  const [createContractAccount, setCreateContractAccount] = useState({
+    name: "",
+    user: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      document: "",
+      phoneNumber: "",
+      password: "",
+      additionalChannelInformation: ""
+    }
+  });
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const body = {
-      name,
-      userId,
-    };
-
-    console.log({ body });
-
     try {
-      const setSc = await contractAccountsRequest.setContracts(body);
+      const setSc = await contractAccountsRequest.setContracts(createContractAccount);
       console.log("post");
       console.log(setSc);
       setShowModal(false);
     } catch (e) {
       console.log("error", e);
     }
-  };
-
-  const getError = () => {
-    if (name.length > 40) {
-      return "Content is too long";
-    }
-
-    return null;
   };
 
   return (
@@ -58,57 +47,83 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Add brand
+          Add contract account
         </Typography>
       </ModalHeader>
 
       <ModalBody>
         <TextInput
-          placeholder="name brand"
-          label="Name"
-          name="text"
+          placeholder="Name Account"
+          label="Name Account"
+          name="name"
           hint="Max 40 characters"
-          error={getError()}
-          onChange={(e: any) => setName(e.target.value)}
-          value={name}
-          />
-          <TextInput
-            placeholder="userId"
-            label="userId"
-            name="text"
-            hint="Max 40 characters"
-            error={getError()}
-            onChange={(e: any) => setUserId(e.target.value)}
-            value={userId}
-          />
-          {/*
-        <TextInput
-          placeholder="description brand"
-          label="Description"
-          name="text"
-          hint="Max 40 characters"
-          error={getError()}
-          onChange={(e: any) => setDescription(e.target.value)}
-          value={description}
+          error={null} // Error não está implementado aqui, você pode adicionar conforme necessário
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, name: e.target.value })}
+          value={createContractAccount?.name}
         />
         <TextInput
-          placeholder="similarTerms brand"
-          label="SimilarTerms"
-          name="text"
+          placeholder="First Name"
+          label="First Name"
+          name="firstName"
           hint="Max 40 characters"
-          error={getError()}
-          onChange={(e: any) => setSimilarTerms(e.target.value)}
-          value={similarTerms}
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, firstName: e.target.value } })}
+          value={createContractAccount?.user?.firstName}
         />
-        <NumberInput
-          label="Punctuation"
-          placeholder="Punctuation brand"
-          aria-label="Punctuation"
-          name="Punctuation"
-          error={undefined}
-          onValueChange={(value: number) => setPunctuation(value)}
-          value={punctuation}
-        /> */}
+        <TextInput
+          placeholder="Last Name"
+          label="Last Name"
+          name="lastName"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, lastName: e.target.value } })}
+          value={createContractAccount?.user?.lastName}
+        />
+        <TextInput
+          placeholder="Email"
+          label="Email"
+          name="email"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, email: e.target.value } })}
+          value={createContractAccount?.user?.email}
+        />
+        <TextInput
+          placeholder="Document"
+          label="Document"
+          name="document"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, document: e.target.value } })}
+          value={createContractAccount?.user?.document}
+        />
+        <TextInput
+          placeholder="Phone Number"
+          label="Phone Number"
+          name="phoneNumber"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, phoneNumber: e.target.value } })}
+          value={createContractAccount?.user?.phoneNumber}
+        />
+        <TextInput
+          placeholder="Password"
+          label="Password"
+          name="password"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, password: e.target.value } })}
+          value={createContractAccount?.user?.password}
+        />
+        <TextInput
+          placeholder="Additional Channel Information"
+          label="Additional Channel Information"
+          name="additionalChannelInformation"
+          hint="Max 40 characters"
+          error={null}
+          onChange={(e: any) => setCreateContractAccount({ ...createContractAccount, user: { ...createContractAccount.user, additionalChannelInformation: e.target.value } })}
+          value={createContractAccount?.user?.additionalChannelInformation}
+        />
       </ModalBody>
 
       <ModalFooter
