@@ -81,7 +81,7 @@ export default [
   },
   {
     method: 'PUT',
-    path: '/updateUser/:id',
+    path: '/updateUser',
     handler: 'usersController.update',
     config: {
       policies: [],

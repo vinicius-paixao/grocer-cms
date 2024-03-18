@@ -31,16 +31,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx) {
     const requestData = ctx.request.body;
-    const id = ctx.params.id
+    // const id = ctx.params.id
 
     try {
-      const updatebrand = await strapi
+      const updateUser = await strapi
         .plugin('users')
         .service('usersService')
-        .update(requestData, id);
+        .update(requestData);
 
       ctx.status = 200
-      ctx.body = updatebrand
+      ctx.body = updateUser
 
       ctx.send({
         message: 'user atualizado com sucesso',

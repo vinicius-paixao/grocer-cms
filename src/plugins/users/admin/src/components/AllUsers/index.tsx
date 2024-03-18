@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import {
   Box,
-  Button,
+  // Button,
   Typography,
   VisuallyHidden,
   Table,
@@ -24,9 +24,9 @@ export default function TodoTable({
   // deleteSC,
   // editTodo,
   setShowModal,
-  setShowAddModal,
-  // brandId,
-}: any) {
+}: // setShowUpdateModal,
+// brandId,
+any) {
   return (
     <Box
       background="neutral0"
@@ -39,13 +39,15 @@ export default function TodoTable({
         colCount={4}
         rowCount={10}
         footer={
-          <TFooter onClick={() => setShowAddModal(true)}>Add new user</TFooter>
+          <TFooter onClick={() => setShowModal(true)}>
+            Add a sale channel
+          </TFooter>
         }
       >
         <Thead>
           <Tr>
             <Th>
-              <Typography variant="sigma">Active</Typography>
+              <Typography variant="sigma">Id</Typography>
             </Th>
 
             <Th>
@@ -67,40 +69,44 @@ export default function TodoTable({
         </Thead>
 
         <Tbody>
-          {/* {users.map((user: any) => { */}
-            {/* return ( */}
-              <Tr key={users.id}>
+          {users.map((user: any) => {
+            return (
+              <Tr key={user.id}>
                 <Td>
-                  <Typography textColor="neutral800">{users.active ? 'True': 'False'}</Typography>
+                  <Typography textColor="neutral800">{user.id}</Typography>
                 </Td>
 
                 <Td>
-                  <Typography textColor="neutral800">{users.firstName}</Typography>
+                  <Typography textColor="neutral800">
+                    {user.firstName}
+                  </Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{users.email}</Typography>
+                  <Typography textColor="neutral800">{user.email}</Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{users.phoneNumber}</Typography>
+                  <Typography textColor="neutral800">
+                    {user.phoneNumber}
+                  </Typography>
                 </Td>
 
-                <Td>
+                {/* <Td>
                   <Button
                     onClick={() => {
-                      setShowModal(true);
+                      setShowUpdateModal(true);
+                      brandId(sc.id);
                     }}
                   >
                     Edit
                   </Button>
-                </Td>
+                </Td> */}
 
                 {/* <Td>
                   <Button onClick={() => deleteSC(sc.id)}>Delete</Button>
                 </Td> */}
-
               </Tr>
-            {/* ); */}
-          {/* })} */}
+            );
+          })}
         </Tbody>
       </Table>
     </Box>
