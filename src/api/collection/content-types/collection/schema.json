@@ -21,15 +21,10 @@
     "end": {
       "type": "date"
     },
-    "banner": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
     "products": {
+      "type": "json"
+    },
+    "banner": {
       "type": "json"
     }
   }

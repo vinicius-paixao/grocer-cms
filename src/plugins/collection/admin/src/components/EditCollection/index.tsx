@@ -24,6 +24,7 @@ export default function TodoTable({ collection, backToView }: any) {
     init: null,
     end: null,
     products: [],
+    banner: [] as any,
   });
 
   const [allProducts, setAllProducts] = useState([] as any);
@@ -61,6 +62,9 @@ export default function TodoTable({ collection, backToView }: any) {
         init: collection.attributes.init,
         end: collection.attributes.end,
         products: collection.attributes.products || [],
+        banner: collection?.attributes?.banner
+          ? collection?.attributes?.banner[0]?.url
+          : [],
       });
     }
   }, [collection]);
@@ -124,6 +128,7 @@ export default function TodoTable({ collection, backToView }: any) {
         title: collectionInfo.title,
         init: collectionInfo.init,
         end: collectionInfo.end,
+        banner: collectionInfo.banner,
         products: updatedProducts.map((product: any) => ({ ...product })),
       },
     };
@@ -138,6 +143,28 @@ export default function TodoTable({ collection, backToView }: any) {
     }
   };
 
+  async function setImage(e: any) {
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await axios.post("/api/upload", formData);
+      const data = response.data;
+      setCollectionInfo({ ...collectionInfo, banner: data });
+      console.log({ data });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleFileButtonClick = (): void => {
+    const fileInput = document.getElementById(`fileInput`) as HTMLInputElement;
+
+    fileInput.click();
+  };
+
   return (
     <Box
       background="neutral0"
@@ -146,6 +173,35 @@ export default function TodoTable({ collection, backToView }: any) {
       padding={8}
       style={{ marginTop: "10px" }}
     >
+      <Flex gap={"50px"} marginTop="20px" direction="column">
+        <Typography variant="delta" textColor="neutral800">
+          Banner Collection
+        </Typography>
+        {collectionInfo?.banner && (
+          <img
+            className=""
+            src={`http://localhost:1337${collectionInfo?.banner}`}
+            alt="Preview"
+          />
+        )}
+
+        <div className="">
+          <input
+            type="file"
+            id={`fileInput`}
+            className="hidden"
+            accept="image/*"
+            onChange={(e) => {
+              setImage(e);
+            }}
+          />
+          <button className="" onClick={handleFileButtonClick}>
+            <img src="./cms/icon_image.svg" alt="" />
+            <p>Adicione fotos ao seu projeto</p>
+          </button>
+        </div>
+      </Flex>
+
       <form onSubmit={handleSubmit}>
         <Flex
           gap={"50px"}
@@ -256,11 +312,7 @@ export default function TodoTable({ collection, backToView }: any) {
             })}
           </Tbody>
         </Table>
-        <Flex
-          alignItems="stretch"
-          gap={11}
-          marginBottom="20px"
-        >
+        <Flex alignItems="stretch" gap={11} marginBottom="20px">
           <Button type="submit">Save Collection</Button>
           <Button onClick={backToView}>Back To View</Button>
         </Flex>

@@ -377,8 +377,8 @@ export interface ApiCollectionCollection extends Schema.CollectionType {
     title: Attribute.String;
     init: Attribute.Date;
     end: Attribute.Date;
-    banner: Attribute.Media;
     products: Attribute.JSON;
+    banner: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
