@@ -55,4 +55,8 @@ export default () => ({
       permissions: [],
     }
   },
+  'collection': {
+    enabled: true,
+    resolve: './src/plugins/collection'
+  },
 });

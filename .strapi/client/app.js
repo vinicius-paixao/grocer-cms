@@ -13,6 +13,7 @@ import products from "../../src/plugins/products/strapi-admin";
 import salesChannels from "../../src/plugins/sales-channels/strapi-admin";
 import stocks from "../../src/plugins/stocks/strapi-admin";
 import users from "../../src/plugins/users/strapi-admin";
+import collection from "../../src/plugins/collection/strapi-admin";
 import { renderAdmin } from "@strapi/strapi/admin";
 
 renderAdmin(document.getElementById("strapi"), {
@@ -28,5 +29,6 @@ renderAdmin(document.getElementById("strapi"), {
     "sales-channels": salesChannels,
     stocks: stocks,
     users: users,
+    collection: collection,
   },
 });
