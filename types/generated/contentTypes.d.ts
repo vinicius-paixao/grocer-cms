@@ -373,6 +373,11 @@ export interface ApiCollectionCollection extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+  };
   attributes: {
     title: Attribute.String;
     init: Attribute.Date;
