@@ -18,10 +18,24 @@ export interface UiBanner extends Schema.Component {
   };
 }
 
+export interface UiImageBanner extends Schema.Component {
+  collectionName: 'components_ui_image_banners';
+  info: {
+    displayName: 'ImageBanner';
+    icon: 'puzzle';
+  };
+  attributes: {
+    position: Attribute.String;
+    image: Attribute.Media;
+    link: Attribute.String;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
       'ui.banner': UiBanner;
+      'ui.image-banner': UiImageBanner;
     }
   }
 }
