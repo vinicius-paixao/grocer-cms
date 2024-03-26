@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import {
   Box,
-  // Button,
+  Button,
   Typography,
   VisuallyHidden,
   Table,
@@ -22,7 +22,7 @@ export default function TodoTable({
   users,
   // toggleTodo,
   // deleteSC,
-  // editTodo,
+  editUser,
   setShowModal,
 }: // setShowUpdateModal,
 // brandId,
@@ -90,16 +90,15 @@ any) {
                   </Typography>
                 </Td>
 
-                {/* <Td>
+                <Td>
                   <Button
                     onClick={() => {
-                      setShowUpdateModal(true);
-                      brandId(sc.id);
+                      editUser(user.contractAccountId, user);
                     }}
                   >
                     Edit
                   </Button>
-                </Td> */}
+                </Td>
 
                 {/* <Td>
                   <Button onClick={() => deleteSC(sc.id)}>Delete</Button>

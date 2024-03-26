@@ -11,14 +11,19 @@ import {
 } from "@strapi/design-system";
 import { usersRequest } from "../../api/users";
 
-export default function TodoModal({ setShowUpdateModal, users }: any) {
+export default function TodoModal({
+  setShowUpdateModal,
+  users,
+  userEdit,
+  token
+}: any) {
   const [userData, setUserData] = useState({
-    firstName: users.firstName || "",
-    lastName: users.lastName || "",
-    email: users.email || "",
-    phoneNumber: users.phoneNumber || "",
-    birthDate: users.birthDate || null,
-    active: users.active || true,
+    firstName: users?.firstName || "",
+    lastName: users?.lastName || "",
+    email: users?.email || "",
+    phoneNumber: users?.phoneNumber || "",
+    birthDate: users?.birthDate || null,
+    active: users?.active || true,
   });
 
   // const [allBrands, setAllBrands] = useState([] as any);
@@ -65,8 +70,12 @@ export default function TodoModal({ setShowUpdateModal, users }: any) {
     e.preventDefault();
     e.stopPropagation();
 
+    const body = {...userData, token, id: users.id}
+
     try {
-      const response = await usersRequest.updateusers(userData);
+      const response = !userEdit
+        ? await usersRequest.updateusers(userData)
+        : await usersRequest.userEdit(body);
       console.log("Updated brand:", response);
       setShowUpdateModal(false);
     } catch (error) {
