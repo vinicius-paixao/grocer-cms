@@ -220,4 +220,25 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.body = 'Internal error'
     }
   },
+
+  async userEdit(ctx) {
+    const requestData = ctx.request.body;
+
+    try {
+      const userEditUsers = await strapi
+        .plugin('users')
+        .service('usersService')
+        .userEdit(requestData);
+
+      ctx.send({
+        message: 'User criado com sucesso',
+      });
+
+      ctx.status = 200
+      ctx.body = userEditUsers
+    } catch (error) {
+      ctx.status = 500
+      ctx.body = 'Internal error'
+    }
+  },
 });

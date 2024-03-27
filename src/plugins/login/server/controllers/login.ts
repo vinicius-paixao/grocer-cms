@@ -101,4 +101,24 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.body = 'Internal error'
     }
   },
+  async loginAsAdmin(ctx) {
+    const requestData = ctx.request.body;
+
+    try {
+      const loginAsAdmin = await strapi
+        .plugin('login')
+        .service('loginService')
+        .loginAsAdmin(requestData);
+
+      ctx.send({
+        message: 'sucesso',
+      });
+
+      ctx.status = 200
+      ctx.body = loginAsAdmin
+    } catch (error) {
+      ctx.status = 500
+      ctx.body = 'Internal error'
+    }
+  },
 });

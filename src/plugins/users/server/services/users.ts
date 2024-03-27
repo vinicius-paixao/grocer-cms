@@ -17,7 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       const response = await axios.get(`${baseUrl}`, { headers: defaultHeaders });
       const usersResponse = response.data;
 
-      console.log({usersResponse})
+      console.log({ usersResponse })
 
       return usersResponse;
     } catch (error) {
@@ -152,6 +152,32 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   async passwrdChange(body) {
     try {
       const response = await axios.patch(`${baseUrl}/password`, body, { headers: defaultHeaders });
+      const usersResponse = response.data;
+
+      console.log('Dados recebidos:', body);
+
+      return usersResponse;
+    } catch (error) {
+      const { status, statusText } = error.response
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+    }
+  },
+
+  async userEdit(body) {
+    const id = body.id
+    const token = body.token
+
+    const newBody = {
+      active: body.active,
+      birthDate: body.birthDate,
+      email: body.email,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      phoneNumber: body.phoneNumber,
+    }
+
+    try {
+      const response = await axios.put(`${baseUrl}/${id}`, newBody, { headers: { ...defaultHeaders, Authorization: `bearer ${token}` } });
       const usersResponse = response.data;
 
       console.log('Dados recebidos:', body);

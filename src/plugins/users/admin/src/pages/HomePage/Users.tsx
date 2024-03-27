@@ -16,6 +16,7 @@ import {
 import UsersTable from "../../components/UsersTable";
 // import BrandModal from "../../components/BrandModal";
 import { usersRequest } from "../../api/users";
+import {loginRequest} from "../../../../../login/admin/src/api/login"
 import UserUpdate from "../../components/UserUpdate";
 import AllUsers from "../../components/AllUsers";
 import AddUser from "../../components/AddUser";
@@ -28,9 +29,12 @@ import AddUser from "../../components/AddUser";
 const ProductCollection: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  // const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [users, setUsers] = useState({});
   const [allUsers, setAllUsers] = useState([]);
+  const [showModalUpdate, setShowModalUpdate] = useState(false)
+  const [userEdit, setUserEdit] = useState({} as any)
+  const [token, setToken] = useState('')
+  // const [showUpdateModal, setShowUpdateModal] = useState(false);
   // const [id, setId] = useState("");
 
   const fetchDataAllUsers = async () => {
@@ -62,6 +66,27 @@ const ProductCollection: FC = () => {
     fetchDataAllUsers();
   }, []);
 
+  const handleUserInfoEdit =async (id: string, user: any) => {
+    setShowModalUpdate(true)
+    setUserEdit(user)
+
+    console.log({id, user})
+    const body  = {
+      contractAccountId: id
+    }
+
+    try {
+      const usersAsAdmin = await loginRequest.loginAsAdmin(body);
+      console.log({usersAsAdmin});
+      setToken(usersAsAdmin.token)
+
+      // setUsers(usersAsAdmin);
+    } catch (e) {
+      setShowModalUpdate(false)
+      console.log("error", e);
+    }
+   }
+
   // async function toggleTodo(data: any) {
   //   alert("Add Toggle Todo in API");
   // }
@@ -90,7 +115,11 @@ const ProductCollection: FC = () => {
   return (
     <Layout>
       {showModal && (
-        <UserUpdate setShowUpdateModal={setShowModal} users={users} />
+        <UserUpdate setShowUpdateModal={setShowModal} users={users} userEdit={false}/>
+      )}
+
+      {showModalUpdate && (
+        <UserUpdate setShowUpdateModal={setShowModalUpdate} users={userEdit} userEdit={true} token={token}/>
       )}
 
       {showAddModal && <AddUser setShowAddModal={setShowAddModal} />}
@@ -148,7 +177,7 @@ const ProductCollection: FC = () => {
           </TabPanel>
           <TabPanel>
             <Box padding={8} background="primary100">
-              <AllUsers users={allUsers} />
+              <AllUsers users={allUsers} editUser={handleUserInfoEdit}/>
             </Box>
           </TabPanel>
         </TabPanels>

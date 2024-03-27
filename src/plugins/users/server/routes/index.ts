@@ -87,4 +87,12 @@ export default [
       policies: [],
     },
   },
+  {
+    method: 'PUT',
+    path: '/userEdit',
+    handler: 'usersController.userEdit',
+    config: {
+      policies: [],
+    },
+  },
 ];

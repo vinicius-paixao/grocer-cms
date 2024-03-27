@@ -61,4 +61,10 @@ export const usersRequest = {
       body
     })
   },
+  userEdit: async (body: any) => {
+    return await request(`/users/userEdit`, {
+      method: 'PUT',
+      body
+    })
+  },
 }

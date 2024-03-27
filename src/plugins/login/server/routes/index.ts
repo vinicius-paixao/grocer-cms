@@ -39,4 +39,12 @@ export default [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/loginAsAdmin',
+    handler: 'loginController.loginAsAdmin',
+    config: {
+      policies: [],
+    },
+  },
 ];
