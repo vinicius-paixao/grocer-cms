@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 export default {
   /**
@@ -9,25 +9,6 @@ export default {
    */
   register({ strapi }) {
     console.log("STRAPI",  strapi.services.teste)
-    strapi.services.teste = {
-      async fetchProductsFromExternalAPI() {
-        try {
-          const response = await axios.get('https://grocers-io.azurewebsites.net/v1/products', {
-            headers: {
-              'content-type': 'application/json',
-              accept: 'application/json',
-              Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNzkwM2ViYy1lNjBhLTQyODctYTJjNi0zNjQyYmY3OTI0ZWUiLCJyb2xlIjoiT3duZXIiLCJuYmYiOjE3MTEwMzIzNzAsImV4cCI6MTcxMTExODc3MCwiaWF0IjoxNzExMDMyMzcwfQ.gx7RUHcIA12r6_GVZJ0YGVsW0776okqId2ENiE87OvU`,
-            }
-          });
-          // return
-
-          console.log(response.data.produtos)
-        } catch (error) {
-          console.error('Erro ao buscar produtos da API externa:', error);
-          throw new Error('Erro ao buscar produtos da API externa.');
-        }
-      }
-    };
   },
 
   /**
@@ -57,6 +38,4 @@ export default {
   //   },
   // },
   }
-
-
 };
