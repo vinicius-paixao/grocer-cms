@@ -31,4 +31,10 @@ export const loginRequest = {
       body
     })
   },
+  loginAsAdmin: async (body: any) => {
+    return await request('/login/loginAsAdmin', {
+      method: 'POST',
+      body
+    })
+  },
 }

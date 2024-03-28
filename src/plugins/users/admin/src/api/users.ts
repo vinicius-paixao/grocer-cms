@@ -13,9 +13,10 @@ export const usersRequest = {
     })
   },
 
-  signupUser: async () => {
+  signupUser: async (body: any) => {
     return await request('/users/signupUser', {
-      method: 'POST'
+      method: 'POST',
+      body
     })
   },
   checkEmail: async () => {
@@ -54,8 +55,14 @@ export const usersRequest = {
     })
   },
 
-  updateusers: async (body: any, id: any) => {
-    return await request(`/users/updateusers/${id}`, {
+  updateusers: async (body: any) => {
+    return await request(`/users/updateUser`, {
+      method: 'PUT',
+      body
+    })
+  },
+  userEdit: async (body: any) => {
+    return await request(`/users/userEdit`, {
       method: 'PUT',
       body
     })

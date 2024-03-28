@@ -31,16 +31,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
   async update(ctx) {
     const requestData = ctx.request.body;
-    const id = ctx.params.id
+    // const id = ctx.params.id
 
     try {
-      const updatebrand = await strapi
+      const updateUser = await strapi
         .plugin('users')
         .service('usersService')
-        .update(requestData, id);
+        .update(requestData);
 
       ctx.status = 200
-      ctx.body = updatebrand
+      ctx.body = updateUser
 
       ctx.send({
         message: 'user atualizado com sucesso',
@@ -215,6 +215,27 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       ctx.status = 200
       ctx.body = passwrdResetCodeUsers
+    } catch (error) {
+      ctx.status = 500
+      ctx.body = 'Internal error'
+    }
+  },
+
+  async userEdit(ctx) {
+    const requestData = ctx.request.body;
+
+    try {
+      const userEditUsers = await strapi
+        .plugin('users')
+        .service('usersService')
+        .userEdit(requestData);
+
+      ctx.send({
+        message: 'User criado com sucesso',
+      });
+
+      ctx.status = 200
+      ctx.body = userEditUsers
     } catch (error) {
       ctx.status = 500
       ctx.body = 'Internal error'
