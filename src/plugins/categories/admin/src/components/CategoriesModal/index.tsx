@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import {
   ModalLayout,
@@ -8,18 +8,23 @@ import {
   Typography,
   Button,
   TextInput,
-  NumberInput,
+  // NumberInput,
 } from "@strapi/design-system";
 import { categoriesRequest } from "../../api/categories";
 
-export default function TodoModal({ setShowModal, addTodo }: any) {
+interface ICategories {
+  setShowModal: (value: boolean) => void;
+  update: (value: boolean) => void;
+}
+
+export default function CategoriesModal({ setShowModal, update }: ICategories) {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [parentCategoryId, setParentCategoryId] = useState("");
   const [similarTerms, setSimilarTerms] = useState("");
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -31,12 +36,13 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
       similarTerms,
     };
 
-    console.log({ body });
+    // console.log({ body });
 
     try {
       const allcategories = await categoriesRequest.setCategories(body);
-      console.log("post");
+      // console.log("post");
       console.log(allcategories);
+      update(true);
       setShowModal(false);
     } catch (e) {
       console.log("error", e);
@@ -60,14 +66,14 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Add categories
+          Adicionar Categoria
         </Typography>
       </ModalHeader>
 
       <ModalBody>
         <TextInput
-          placeholder="name categories"
-          label="Name"
+          placeholder="nome da categoria"
+          label="Nome"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -75,8 +81,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={name}
         />
         <TextInput
-          placeholder="title categories"
-          label="Title"
+          placeholder="titulo da categoria"
+          label="Titulo"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -84,8 +90,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={title}
         />
         <TextInput
-          placeholder="description categories"
-          label="Description"
+          placeholder="descrição da categoria"
+          label="Descrição"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -102,8 +108,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={parentCategoryId}
         />
         <TextInput
-          placeholder="similarTerms categories"
-          label="SimilarTerms"
+          placeholder="categorias similares"
+          label="Categorias similares"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -115,10 +121,10 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
       <ModalFooter
         startActions={
           <Button onClick={() => setShowModal(false)} variant="tertiary">
-            Cancel
+            Cancelar
           </Button>
         }
-        endActions={<Button type="submit">Add Categories</Button>}
+        endActions={<Button type="submit">Adicionar Categoria</Button>}
       />
     </ModalLayout>
   );

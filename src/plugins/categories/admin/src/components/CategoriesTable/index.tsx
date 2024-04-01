@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
@@ -13,20 +11,23 @@ import {
   Td,
   Th,
 } from "@strapi/design-system";
-import Pencil from "@strapi/icons";
-import Trash from "@strapi/icons";
-import Plus from "@strapi/icons/Plus";
-import { categoriesRequest } from "../../api/categories";
+import { ICategories } from "../../types/categories";
 
-export default function TodoTable({
-  todoData,
-  toggleTodo,
-  deleteTodo,
-  editTodo,
+interface ICategorieTable {
+  categorieData: ICategories[]
+  deleteCategorie: (value: string) => void
+  setShowModal: (value: boolean) => void
+  setShowUpdateModal: (value: boolean) => void
+  brandId: (value: string) => void
+}
+
+export default function CategorieTable({
+  categorieData,
+  deleteCategorie,
   setShowModal,
   setShowUpdateModal,
   brandId,
-}: any) {
+}: ICategorieTable) {
   return (
     <Box
       background="neutral0"
@@ -49,31 +50,31 @@ export default function TodoTable({
             </Th>
 
             <Th>
-              <Typography variant="sigma">Contract Account Id</Typography>
+              <Typography variant="sigma">Id de contrato</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Name</Typography>
+              <Typography variant="sigma">Nome</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Title</Typography>
+              <Typography variant="sigma">Titulo</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Description</Typography>
+              <Typography variant="sigma">Descrição</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Parent Category Id</Typography>
+              <Typography variant="sigma">Id de categoria similar</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Parent Category</Typography>
+              <Typography variant="sigma">categoria similar</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Similar Terms</Typography>
+              <Typography variant="sigma">termos similares</Typography>
             </Th>
 
             <Th>
@@ -83,39 +84,39 @@ export default function TodoTable({
         </Thead>
 
         <Tbody>
-          {todoData.map((todo: any) => {
+          {categorieData.map((categorie: any) => {
             return (
-              <Tr key={todo.id}>
+              <Tr key={categorie.id}>
                 <Td>
-                  <Typography textColor="neutral800">{todo.id}</Typography>
+                  <Typography textColor="neutral800">{categorie.id}</Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{todo.contractAccountId}</Typography>
+                  <Typography textColor="neutral800">{categorie.contractAccountId}</Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{todo.name}</Typography>
+                  <Typography textColor="neutral800">{categorie.name}</Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{todo.title}</Typography>
+                  <Typography textColor="neutral800">{categorie.title}</Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.description}
+                    {categorie.description}
                   </Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.parentCategoryId}
+                    {categorie.parentCategoryId}
                   </Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.parentCategory}
+                    {categorie.parentCategory}
                   </Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.similarTerms}
+                    {categorie.similarTerms}
                   </Typography>
                 </Td>
 
@@ -123,15 +124,15 @@ export default function TodoTable({
                   <Button
                     onClick={() => {
                       setShowUpdateModal(true);
-                      brandId(todo.id);
+                      brandId(categorie.id);
                     }}
                   >
-                    Edit
+                    Editar
                   </Button>
                 </Td>
 
                 <Td>
-                  <Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
+                  <Button onClick={() => deleteCategorie(categorie.id)}>Deletar</Button>
                 </Td>
               </Tr>
             );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   ModalLayout,
   ModalHeader,
@@ -10,8 +10,19 @@ import {
   NumberInput,
 } from "@strapi/design-system";
 import { categoriesRequest } from "../../api/categories";
+import { ICategories } from "../../types/categories";
 
-export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
+interface IUpdateModal {
+  setShowUpdateModal: (value: boolean) => void;
+  id: string;
+  update: (value: boolean) => void;
+}
+
+export default function UpdateModal({
+  setShowUpdateModal,
+  id,
+  update,
+}: IUpdateModal) {
   const [categoriesData, setCategoriesData] = useState({
     name: "",
     title: "",
@@ -19,7 +30,7 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     similarTerms: "",
   });
 
-  const [allCategories, setAllCategories] = useState([] as any);
+  const [allCategories, setAllCategories] = useState<ICategories[]>([]);
 
   const fetchData = async () => {
     try {
@@ -35,9 +46,11 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
   }, []);
 
   useEffect(() => {
-    const filter = allCategories.filter((categories: any) => categories.id === id);
+    const filter = allCategories.filter(
+      (categories: any) => categories.id === id
+    );
 
-    console.log({filter})
+    console.log({ filter });
 
     if (filter) {
       setCategoriesData({
@@ -49,26 +62,35 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     }
   }, [allCategories]);
 
-  console.log({ allCategories, categoriesData });
-
-  const handleEdit = (fieldName: any, value: any) => {
+  const handleEdit = (fieldName: string, value: string) => {
     setCategoriesData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
     try {
-      const response = await categoriesRequest.updateCategories(categoriesData, id);
+      const response = await categoriesRequest.updateCategories(
+        categoriesData,
+        id
+      );
       console.log("Updated categories:", response);
+      update(true);
       setShowUpdateModal(false);
     } catch (error) {
       console.error("Error updating categories:", error);
     }
+  };
+
+  const fieldNameMap: { [key: string]: string } = {
+    name: "nome",
+    title: "titulo",
+    description: "descrição",
+    similarTerms: "termos similares",
   };
 
   return (
@@ -80,30 +102,33 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Add categories
+          Atualizar categoria
         </Typography>
       </ModalHeader>
 
       <ModalBody>
-        {Object.entries(categoriesData).map(([field, value]) => (
+        {Object.entries(categoriesData).map(([field, value]) => {
+          const newFieldName = fieldNameMap[field] || field;
+
+          return(
           <TextInput
             key={field}
             placeholder={`${field} categories`}
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            label={newFieldName.charAt(0).toUpperCase() + newFieldName.slice(1)}
             name={field}
             value={value}
             onChange={(e: any) => handleEdit(field, e.target.value)}
           />
-        ))}
+        )})}
       </ModalBody>
 
       <ModalFooter
         startActions={
           <Button onClick={() => setShowUpdateModal(false)} variant="tertiary">
-            Cancel
+            Cancelar
           </Button>
         }
-        endActions={<Button type="submit">Update categories</Button>}
+        endActions={<Button type="submit">Atualizar</Button>}
       />
     </ModalLayout>
   );

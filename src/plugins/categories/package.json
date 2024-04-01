@@ -1,10 +1,10 @@
 {
-  "name": "categories",
+  "name": "categorias",
   "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "description": "Gerenciador de categorias.",
   "strapi": {
-    "name": "categories",
-    "description": "Description of categories plugin",
+    "name": "categorias",
+    "description": "Gerenciador de categorias.",
     "kind": "plugin"
   },
   "dependencies": {
