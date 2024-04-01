@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import {
   Box,
@@ -16,25 +16,34 @@ import {
 } from "@strapi/design-system";
 import { productsRequest } from "../../../../../products/admin/src/api/products";
 import axios from "axios";
+import { ICollection } from "../../types/collection";
+import { IProduct } from "../../types/product";
 
-export default function TodoTable({ collection, backToView }: any) {
+interface IEditCollectionTable {
+  collection: ICollection;
+  backToView: () => void;
+  update: (value: boolean) => void;
+}
+
+export default function EditCollectionTable({
+  collection,
+  backToView,
+  update
+}: IEditCollectionTable) {
+  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
   const [collectionInfo, setCollectionInfo] = useState({
     id: "",
     title: "",
-    init: null,
-    end: null,
-    products: [],
+    init: "",
+    end: "",
+    products: [] as any,
     banner: [] as any,
   });
-
-  const [allProducts, setAllProducts] = useState([] as any);
-  const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const fetchData = async () => {
     try {
       const allProducts = await productsRequest.getAllProducts();
-      console.log("dasdasd");
-      console.log(allProducts);
 
       setAllProducts(allProducts);
     } catch (e) {
@@ -46,13 +55,13 @@ export default function TodoTable({ collection, backToView }: any) {
     fetchData();
   }, []);
 
-  const getError = () => {
-    // if (name?.length > 40) {
-    //   return "Content is too long";
-    // }
+  // const getError = () => {
+  //   // if (name?.length > 40) {
+  //   //   return "Content is too long";
+  //   // }
 
-    return null;
-  };
+  //   return null;
+  // };
 
   useEffect(() => {
     if (collection) {
@@ -69,9 +78,7 @@ export default function TodoTable({ collection, backToView }: any) {
     }
   }, [collection]);
 
-  console.log({ collectionInfo });
-
-  const handleInputChange = (e: any, key: any) => {
+  const handleInputChange = (e: any, key: string) => {
     setCollectionInfo({
       ...collectionInfo,
       [key]: e.target.value,
@@ -80,13 +87,13 @@ export default function TodoTable({ collection, backToView }: any) {
 
   useEffect(() => {
     // Adiciona automaticamente produtos marcados ao selectedProducts
-    const markedProducts = collectionInfo.products.filter((product: any) =>
-      allProducts.some((p: any) => p.id === product.id)
+    const markedProducts = collectionInfo.products.filter((product: IProduct) =>
+      allProducts.some((p) => p.id === product.id)
     );
     setSelectedProducts(markedProducts);
   }, [collectionInfo.products, allProducts]);
 
-  const handleCheckboxChange = (product: any, isChecked: any) => {
+  const handleCheckboxChange = (product: IProduct, isChecked: boolean) => {
     if (isChecked) {
       setSelectedProducts((prevSelectedProducts: any) => [
         ...prevSelectedProducts,
@@ -101,25 +108,12 @@ export default function TodoTable({ collection, backToView }: any) {
     }
   };
 
-  function formatarData(data: any) {
-    // Cria um objeto Date com a data fornecida
-    const dateObj = new Date(data);
-
-    // Extrai o dia, mês e ano do objeto Date
-    const dia = String(dateObj.getDate()).padStart(2, "0");
-    const mes = String(dateObj.getMonth() + 1).padStart(2, "0"); // O mês é baseado em zero
-    const ano = dateObj.getFullYear();
-
-    // Retorna a data formatada no formato "MM/DD/YYYY"
-    return `${mes}/${dia}/${ano}`;
-  }
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedProducts = allProducts.filter((product: any) =>
+    const updatedProducts = allProducts.filter((product) =>
       selectedProducts.some(
-        (selectedProduct: any) => selectedProduct.id === product.id
+        (selectedProduct) => selectedProduct.id === product.id
       )
     );
 
@@ -129,22 +123,21 @@ export default function TodoTable({ collection, backToView }: any) {
         init: collectionInfo.init,
         end: collectionInfo.end,
         banner: collectionInfo.banner,
-        products: updatedProducts.map((product: any) => ({ ...product })),
+        products: updatedProducts.map((product) => ({ ...product })),
       },
     };
 
-    console.log(dataToSend);
-
     try {
       await axios.put(`/api/collections/${collectionInfo?.id}`, dataToSend);
-      console.log("dasdasd");
+      update(true)
     } catch (e) {
       console.log("error", e);
     }
   };
 
-  async function setImage(e: any) {
-    const file = e.target.files[0];
+  async function setImage(e: ChangeEvent) {
+    const target = e.target as HTMLInputElement;
+    const file: File = (target.files as FileList)[0];
 
     const formData = new FormData();
     formData.append("files", file);
@@ -175,31 +168,35 @@ export default function TodoTable({ collection, backToView }: any) {
     >
       <Flex gap={"50px"} marginTop="20px" direction="column">
         <Typography variant="delta" textColor="neutral800">
-          Banner Collection
+          Banner da Coleçao
         </Typography>
         {collectionInfo?.banner && (
-          <img
-            className=""
-            src={`http://localhost:1337${collectionInfo?.banner}`}
-            alt="Preview"
-          />
+          <Flex>
+            <img
+              className=""
+              src={`http://localhost:1337${collectionInfo?.banner}`}
+              alt="Preview"
+            />
+          </Flex>
         )}
 
-        <div className="">
-          <input
-            type="file"
-            id={`fileInput`}
-            className="hidden"
-            accept="image/*"
-            onChange={(e) => {
-              setImage(e);
-            }}
-          />
-          <button className="" onClick={handleFileButtonClick}>
-            <img src="./cms/icon_image.svg" alt="" />
-            <p>Adicione fotos ao seu projeto</p>
-          </button>
-        </div>
+        <Flex>
+          <div className="">
+            <input
+              type="file"
+              id={`fileInput`}
+              className="hidden"
+              accept="image/*"
+              onChange={(e) => {
+                setImage(e);
+              }}
+            />
+            <button className="" onClick={handleFileButtonClick}>
+              <img src="./cms/icon_image.svg" alt="" />
+              <p>Adicione fotos ao seu projeto</p>
+            </button>
+          </div>
+        </Flex>
       </Flex>
 
       <form onSubmit={handleSubmit}>
@@ -210,7 +207,7 @@ export default function TodoTable({ collection, backToView }: any) {
           marginTop="20px"
         >
           <Typography variant="delta" textColor="neutral800">
-            collectionId:
+            id da coleção:
           </Typography>
           <Typography variant="sigma" textColor="neutral800">
             {collectionInfo.id}
@@ -224,7 +221,7 @@ export default function TodoTable({ collection, backToView }: any) {
           marginTop="20px"
         >
           <Typography variant="delta" textColor="neutral800">
-            title collection
+            titulo
           </Typography>
           <TextInput
             placeholder="name brand"
@@ -237,13 +234,9 @@ export default function TodoTable({ collection, backToView }: any) {
 
         <Flex direction="column" alignItems="stretch" gap={11}>
           <DatePicker
-            label="init"
+            label="inicio"
             onChange={(date: any) => {
-              console.log({ date });
-              handleInputChange(
-                { target: { value: formatarData(date) } },
-                "init"
-              );
+              handleInputChange({ target: { value: date } }, "init");
             }}
             selectedDate={collectionInfo.init}
           />
@@ -256,12 +249,9 @@ export default function TodoTable({ collection, backToView }: any) {
           marginBottom="20px"
         >
           <DatePicker
-            label="end"
+            label="fim"
             onChange={(date: any) =>
-              handleInputChange(
-                { target: { value: formatarData(date) } },
-                "end"
-              )
+              handleInputChange({ target: { value: date } }, "end")
             }
             selectedDate={collectionInfo.end}
           />
@@ -272,24 +262,24 @@ export default function TodoTable({ collection, backToView }: any) {
             <Tr>
               <Th></Th>
               <Th>
-                <Typography variant="sigma">name</Typography>
+                <Typography variant="sigma">nome</Typography>
               </Th>
               <Th>
                 <Typography variant="sigma">id</Typography>
               </Th>
               <Th>
-                <Typography variant="sigma">active</Typography>
+                <Typography variant="sigma">ativo</Typography>
               </Th>
               <Th>
-                <Typography variant="sigma">category</Typography>
+                <Typography variant="sigma">categoria</Typography>
               </Th>
             </Tr>
           </Thead>
 
           <Tbody>
-            {allProducts.map((product: any) => {
+            {allProducts.map((product: IProduct) => {
               const isChecked = selectedProducts.some(
-                (p: any) => p.id === product.id
+                (p) => p.id === product.id
               );
 
               return (
@@ -313,8 +303,8 @@ export default function TodoTable({ collection, backToView }: any) {
           </Tbody>
         </Table>
         <Flex alignItems="stretch" gap={11} marginBottom="20px">
-          <Button type="submit">Save Collection</Button>
-          <Button onClick={backToView}>Back To View</Button>
+          <Button type="submit">Atualizar coleção</Button>
+          <Button onClick={backToView}>Voltar para visualização</Button>
         </Flex>
       </form>
     </Box>

@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
@@ -14,29 +12,21 @@ import {
   Th,
   Flex,
 } from "@strapi/design-system";
-// import { productsRequest } from "../../api/products";
+import { ICollection } from "../../types/collection";
 
-export default function TodoTable({
+interface ICollectionTable {
+  collectionsData: ICollection[];
+  collectionView: (value: string) => void;
+  collectionDelete: (value: string) => void;
+  collectionCreate: () => void;
+}
+
+export default function CollectionsTable({
   collectionsData,
-  // collectionEdit,
   collectionView,
   collectionDelete,
-  setShowModal,
-  setShowUpdateModal,
   collectionCreate,
-}: any) {
-  const handleSubmit = async (productId: string) => {
-    // try {
-    //   const deletePrdict = await productsRequest.deleteProduct(productId);
-    //   console.log("post");
-    //   console.log(deletePrdict);
-    //   // setShowModal(false);
-    // } catch (e) {
-    //   console.log("error", e);
-    // }
-  };
-
-  console.log({ collectionsData });
+}: ICollectionTable) {
 
   return (
     <Box
@@ -49,24 +39,20 @@ export default function TodoTable({
       <Table
         colCount={4}
         rowCount={10}
-        footer={<TFooter onClick={collectionCreate}>Add a product</TFooter>}
+        footer={<TFooter onClick={collectionCreate}>adicionar coleção</TFooter>}
       >
         <Thead>
           <Tr>
-            {/* <Th>
-              <Typography variant="sigma">Imagem</Typography>
-            </Th> */}
-
             <Th>
-              <Typography variant="sigma">Title</Typography>
+              <Typography variant="sigma">Titulo</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Init</Typography>
+              <Typography variant="sigma">Inicio</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">End</Typography>
+              <Typography variant="sigma">final</Typography>
             </Th>
 
             <Th>
@@ -80,7 +66,7 @@ export default function TodoTable({
         </Thead>
 
         <Tbody>
-          {collectionsData?.map((collection: any) => {
+          {collectionsData?.map((collection: ICollection) => {
             return (
               <Tr key={collection?.id}>
                 <Td>
@@ -105,28 +91,18 @@ export default function TodoTable({
                   <Flex>
                     <Button
                       onClick={() => {
-                        setShowUpdateModal(true);
                         collectionView(collection?.id);
                       }}
                     >
-                      View
+                      Visualizar
                     </Button>
-                    {/* <Button
-                      onClick={() => {
-                        setShowUpdateModal(true);
-                        collectionEdit(collection?.id);
-                      }}
-                    >
-                      Edit
-                    </Button> */}
                     <Button
                       variant="danger"
                       onClick={() => {
-                        setShowUpdateModal(true);
                         collectionDelete(collection?.id);
                       }}
                     >
-                      Delete
+                      Deletar
                     </Button>
                   </Flex>
                 </Td>

@@ -2,15 +2,9 @@ import { FC, useEffect, useState } from "react";
 import {
   Layout,
   BaseHeaderLayout,
-  HeaderLayout,
   ContentLayout,
   EmptyStateLayout,
   Button,
-  Tabs,
-  Tab,
-  TabGroup,
-  TabPanels,
-  TabPanel,
   Box,
 } from "@strapi/design-system";
 import CollectionsTable from "../../components/CollectionsTable";
@@ -18,30 +12,19 @@ import axios from "axios";
 import ViewCollection from "../../components/ViewCollection";
 import EditCollection from "../../components/EditCollection";
 import CreateCollection from "../../components/CreateCollection";
-// import EditProduct from "../../components/EditProduct";
-// import CreateProduct from "../../components/CreateProduct";
-// import BrandModal from "../../components/BrandModal";
-// import { productsRequest } from "../../api/products";
-// import BrandModalUpdate from "../../components/BrandModalUpdate";
-// import { ProductCollectionModal } from "../../components/ProductCollectionModal";
-// import { useProductCollection } from "../../context/ProductCollectionContext";
-// import { ProductListTable } from "../../components/ProductCollectionList";
+import { ICollection } from "../../types/collection";
 
-const Products: FC = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [allCollections, setAllCollections] = useState({} as any);
+const Collection: FC = () => {
+  const [allCollections, setAllCollections] = useState<ICollection[]>([]);
   const [viewCollection, setViewCollection] = useState(false);
   const [editCollection, setEditCollection] = useState(false);
-  const [collection, setCollection] = useState({} as any);
+  const [collection, setCollection] = useState({} as ICollection);
   const [createCollection, setCreateCollection] = useState(false);
+  const [updateReload, setUpdateReload] = useState(false);
 
   const fetchData = async () => {
     try {
       const collections = await axios.get("/api/collections");
-      console.log("dasdasd");
-      console.log(allCollections);
-
       const collection = collections.data;
 
       setAllCollections(collection.data);
@@ -52,21 +35,17 @@ const Products: FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [updateReload]);
 
   async function handleEdit() {
     setEditCollection(!editCollection);
   }
 
-  const handleViewOne = async (id: any) => {
+  const handleViewOne = async (id: string) => {
     setViewCollection(true);
-    console.log({ id });
 
     try {
       const collections = await axios.get(`/api/collections/${id}`);
-      console.log("dasdasd");
-      console.log(allCollections);
-
       const collection = collections.data;
 
       setCollection(collection.data);
@@ -87,7 +66,7 @@ const Products: FC = () => {
     setCreateCollection(!createCollection);
   };
 
-  const handleDeleteCollection = async (id: any) => {
+  const handleDeleteCollection = async (id: string) => {
     await axios
       .delete(`/api/collections/${id}`)
       .then(() => {})
@@ -96,13 +75,9 @@ const Products: FC = () => {
 
   return (
     <Layout>
-      {/* {showModal && <BrandModal setShowModal={setShowModal} />}
-      {showUpdateModal && (
-        <BrandModalUpdate setShowUpdateModal={setShowUpdateModal} id={id} />
-      )} */}
       <BaseHeaderLayout
-        title="Collections"
-        subtitle="All yours collections in one place."
+        title="Coleções"
+        subtitle="Todas suas coleções um um unico lugar."
         as="h2"
       />
       <ContentLayout>
@@ -114,6 +89,7 @@ const Products: FC = () => {
                   <EditCollection
                     collection={collection}
                     backToView={handleBackToView}
+                    update={setUpdateReload}
                   />
                 ) : (
                   <ViewCollection
@@ -126,12 +102,10 @@ const Products: FC = () => {
             ) : (
               <>
                 {createCollection ? (
-                  <CreateCollection backToCollection={handleCollectionCreate}/>
+                  <CreateCollection backToCollection={handleCollectionCreate} />
                 ) : (
                   <CollectionsTable
                     collectionsData={allCollections}
-                    setShowModal={setShowModal}
-                    setShowUpdateModal={setShowUpdateModal}
                     collectionView={handleViewOne}
                     collectionDelete={handleDeleteCollection}
                     collectionCreate={handleCollectionCreate}
@@ -139,25 +113,27 @@ const Products: FC = () => {
                 )}
               </>
             )}
-
           </Box>
         ) : (
-          <EmptyStateLayout
-            icon={""}
-            content="You don't have any brands yet..."
-            action={
-              <Button
-                onClick={handleCollectionCreate}
-                variant="secondary"
-              >
-                Add collection
-              </Button>
-            }
-          />
+          <>
+            {!createCollection ? (
+              <EmptyStateLayout
+                icon={""}
+                content="Não ha coleções..."
+                action={
+                  <Button onClick={handleCollectionCreate} variant="secondary">
+                    Criar coleção
+                  </Button>
+                }
+              />
+            ) : (
+              <CreateCollection backToCollection={handleCollectionCreate} />
+            )}
+          </>
         )}
       </ContentLayout>
     </Layout>
   );
 };
 
-export default Products;
+export default Collection;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import {
   Box,
@@ -16,8 +16,17 @@ import {
 } from "@strapi/design-system";
 import { productsRequest } from "../../../../../products/admin/src/api/products";
 import axios from "axios";
+import { IProduct } from "../../types/product";
 
-export default function TodoTable({ backToCollection }: any) {
+interface ICreateCollectionTable {
+  backToCollection: () => void;
+}
+
+export default function CreateCollectionTable({
+  backToCollection,
+}: ICreateCollectionTable) {
+  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
   const [collectionInfo, setCollectionInfo] = useState({
     title: "",
     init: "",
@@ -25,9 +34,6 @@ export default function TodoTable({ backToCollection }: any) {
     products: [] as any,
     banner: null,
   });
-
-  const [allProducts, setAllProducts] = useState([] as any);
-  const [selectedProducts, setSelectedProducts] = useState([] as any);
 
   const fetchData = async () => {
     try {
@@ -42,22 +48,22 @@ export default function TodoTable({ backToCollection }: any) {
     fetchData();
   }, []);
 
-  const handleCheckboxChange = (product: any, isChecked: any) => {
+  const handleCheckboxChange = (product: IProduct, isChecked: boolean) => {
     if (isChecked) {
-      setSelectedProducts((prevSelectedProducts: any) => [
+      setSelectedProducts((prevSelectedProducts) => [
         ...prevSelectedProducts,
         product,
       ]);
     } else {
-      setSelectedProducts((prevSelectedProducts: any) =>
+      setSelectedProducts((prevSelectedProducts) =>
         prevSelectedProducts.filter(
-          (selectedProduct: any) => selectedProduct.id !== product.id
+          (selectedProduct) => selectedProduct.id !== product.id
         )
       );
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const dataToSend = {
@@ -65,12 +71,10 @@ export default function TodoTable({ backToCollection }: any) {
         title: collectionInfo.title,
         init: collectionInfo.init,
         end: collectionInfo.end,
-        products: selectedProducts.map((product: any) => ({ ...product })),
+        products: selectedProducts.map((product) => ({ ...product })),
         banner: collectionInfo.banner,
       },
     };
-
-    console.log({ dataToSend });
 
     try {
       await axios.post(`/api/collections`, dataToSend);
@@ -89,8 +93,9 @@ export default function TodoTable({ backToCollection }: any) {
     }
   };
 
-  async function setImage(e: any) {
-    const file = e.target.files[0];
+  async function setImage(e: ChangeEvent) {
+    const target = e.target as HTMLInputElement;
+    const file: File = (target.files as FileList)[0];
 
     const formData = new FormData();
     formData.append("files", file);
@@ -192,22 +197,22 @@ export default function TodoTable({ backToCollection }: any) {
             <Tr>
               <Th></Th>
               <Th>
-                <Typography variant="sigma">Name</Typography>
+                <Typography variant="sigma">Nome</Typography>
               </Th>
               <Th>
                 <Typography variant="sigma">ID</Typography>
               </Th>
               <Th>
-                <Typography variant="sigma">Active</Typography>
+                <Typography variant="sigma">Ativo</Typography>
               </Th>
               <Th>
-                <Typography variant="sigma">Category</Typography>
+                <Typography variant="sigma">Categoria</Typography>
               </Th>
             </Tr>
           </Thead>
 
           <Tbody>
-            {allProducts.map((product: any) => {
+            {allProducts.map((product) => {
               const isChecked = selectedProducts.some(
                 (p: any) => p.id === product.id
               );
@@ -232,9 +237,10 @@ export default function TodoTable({ backToCollection }: any) {
             })}
           </Tbody>
         </Table>
+
         <Flex alignItems="stretch" gap={11} marginBottom="20px">
-          <Button type="submit">Create Collection</Button>
-          <Button onClick={backToCollection}>Back To View</Button>
+          <Button type="submit">Criar coleção</Button>
+          <Button onClick={backToCollection}>retornar</Button>
         </Flex>
       </form>
     </Box>

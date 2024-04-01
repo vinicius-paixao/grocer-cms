@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
   Typography,
-  VisuallyHidden,
   Table,
   Thead,
   TFooter,
@@ -14,19 +11,19 @@ import {
   Th,
   Flex,
 } from "@strapi/design-system";
-// import { productsRequest } from "../../api/products";
+import { ICollection } from "../../types/collection";
 
-export default function TodoTable({
+interface ICollectionViewTable {
+  collection: ICollection;
+  collectionEdit: () => void;
+  backToCollection: () => void;
+}
+
+export default function CollectionViewTable({
   collection,
   collectionEdit,
   backToCollection,
-  collectionView,
-  collectionDelete,
-  setShowModal,
-  setShowUpdateModal,
-  collectionCreate,
-}: any) {
-
+}: ICollectionViewTable) {
   return (
     <Box
       background="neutral0"
@@ -42,7 +39,7 @@ export default function TodoTable({
         marginTop="20px"
       >
         <Typography variant="delta" textColor="neutral800">
-          CollectionId:
+          Id da coleção:
         </Typography>
         <Typography variant="sigma" textColor="neutral800">
           {collection?.id}
@@ -56,7 +53,7 @@ export default function TodoTable({
         marginTop="20px"
       >
         <Typography variant="delta" textColor="neutral800">
-          init:
+          inicio:
         </Typography>
         <Typography variant="sigma" textColor="neutral800">
           {collection?.attributes?.init}
@@ -70,7 +67,7 @@ export default function TodoTable({
         marginBottom="20px"
       >
         <Typography variant="delta" textColor="neutral800">
-          end:
+          final:
         </Typography>
         <Typography variant="sigma" textColor="neutral800">
           {collection?.attributes?.end}
@@ -80,16 +77,12 @@ export default function TodoTable({
       <Table
         colCount={4}
         rowCount={10}
-        footer={<TFooter onClick={collectionEdit}>Edit Collection</TFooter>}
+        footer={<TFooter onClick={collectionEdit}>Editar Coleção</TFooter>}
       >
         <Thead>
           <Tr>
-            {/* <Th>
-              <Typography variant="sigma">Imagem</Typography>
-            </Th> */}
-
             <Th>
-              <Typography variant="sigma">name</Typography>
+              <Typography variant="sigma">nome da coleção</Typography>
             </Th>
 
             <Th>
@@ -97,16 +90,12 @@ export default function TodoTable({
             </Th>
 
             <Th>
-              <Typography variant="sigma">active</Typography>
+              <Typography variant="sigma">ativo</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">category</Typography>
+              <Typography variant="sigma">categoria</Typography>
             </Th>
-{/*
-            <Th>
-              <VisuallyHidden>Actions</VisuallyHidden>
-            </Th> */}
           </Tr>
         </Thead>
 
@@ -137,21 +126,15 @@ export default function TodoTable({
                     {collection?.category}
                   </Typography>
                 </Td>
-
-
               </Tr>
             );
           })}
         </Tbody>
       </Table>
 
-      <Flex
-          alignItems="stretch"
-          gap={11}
-          marginBottom="20px"
-        >
-          <Button onClick={backToCollection}>Back To View</Button>
-        </Flex>
+      <Flex alignItems="stretch" gap={11} marginBottom="20px">
+        <Button onClick={backToCollection}>Voltar para visualização</Button>
+      </Flex>
     </Box>
   );
 }

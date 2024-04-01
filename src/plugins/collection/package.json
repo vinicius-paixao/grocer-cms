@@ -1,10 +1,10 @@
 {
-  "name": "collection",
+  "name": "colecao",
   "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "description": "Gerenciador de coleções.",
   "strapi": {
-    "name": "collection",
-    "description": "Description of collection plugin",
+    "name": "coleção",
+    "description": "Gerenciador de coleções",
     "kind": "plugin"
   },
   "dependencies": {
