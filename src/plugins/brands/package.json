@@ -1,10 +1,10 @@
 {
-  "name": "brands",
+  "name": "marcas",
   "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "description": "Gerenciador de marcas.",
   "strapi": {
-    "name": "brands",
-    "description": "Description of brands plugin",
+    "name": "marcas",
+    "description": "Gerenciador de marcas",
     "kind": "plugin"
   },
   "dependencies": {

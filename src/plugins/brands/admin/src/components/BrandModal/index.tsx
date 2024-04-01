@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FormEvent, useState } from "react";
 
 import {
   ModalLayout,
@@ -12,14 +12,19 @@ import {
 } from "@strapi/design-system";
 import { brandsRequest } from "../../api/brands";
 
-export default function TodoModal({ setShowModal, addTodo }: any) {
+interface IBrandModal {
+  setShowModal: (value: boolean) => void;
+  update: (value: boolean) => void;
+}
+
+export default function BrandModal({ setShowModal, update }: IBrandModal) {
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [punctuation, setPunctuation] = useState<number>(0);
   const [similarTerms, setSimilarTerms] = useState("");
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -31,12 +36,13 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
       similarTerms,
     };
 
-    console.log({ body });
+    // console.log({ body });
 
     try {
-      const allbrands = await brandsRequest.setBrands(body);
-      console.log("post");
-      console.log(allbrands);
+      await brandsRequest.setBrands(body);
+      // console.log("post");
+      // console.log(allbrands);
+      update(true);
       setShowModal(false);
     } catch (e) {
       console.log("error", e);
@@ -60,14 +66,14 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Add brand
+          Adicionar Marca
         </Typography>
       </ModalHeader>
 
       <ModalBody>
         <TextInput
-          placeholder="name brand"
-          label="Name"
+          placeholder="nome da marca"
+          label="Nome"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -75,8 +81,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={name}
         />
         <TextInput
-          placeholder="title brand"
-          label="Title"
+          placeholder="titulo da marca"
+          label="Titulo"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -84,8 +90,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={title}
         />
         <TextInput
-          placeholder="description brand"
-          label="Description"
+          placeholder="descrição da marca"
+          label="Descrição"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -93,8 +99,8 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={description}
         />
         <TextInput
-          placeholder="similarTerms brand"
-          label="SimilarTerms"
+          placeholder="termos similares"
+          label="Termos similares"
           name="text"
           hint="Max 40 characters"
           error={getError()}
@@ -102,10 +108,10 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
           value={similarTerms}
         />
         <NumberInput
-          label="Punctuation"
-          placeholder="Punctuation brand"
-          aria-label="Punctuation"
-          name="Punctuation"
+          label="Pontuação"
+          placeholder="pontuação da marca"
+          aria-label="Pontuação"
+          name="Pontuação"
           error={undefined}
           onValueChange={(value: number) => setPunctuation(value)}
           value={punctuation}
@@ -115,10 +121,10 @@ export default function TodoModal({ setShowModal, addTodo }: any) {
       <ModalFooter
         startActions={
           <Button onClick={() => setShowModal(false)} variant="tertiary">
-            Cancel
+            Cancelar
           </Button>
         }
-        endActions={<Button type="submit">Add Brand</Button>}
+        endActions={<Button type="submit">Adicionar</Button>}
       />
     </ModalLayout>
   );

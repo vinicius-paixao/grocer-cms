@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
@@ -13,20 +11,23 @@ import {
   Td,
   Th,
 } from "@strapi/design-system";
-import Pencil from "@strapi/icons";
-import Trash from "@strapi/icons";
-import Plus from "@strapi/icons/Plus";
-import { brandsRequest } from "../../api/brands";
+import { brandsData } from "../../types/brands";
 
-export default function TodoTable({
-  todoData,
-  toggleTodo,
-  deleteTodo,
-  editTodo,
+interface IBrandTable {
+  brandData: brandsData[];
+  deleteBrand: (value: string) => void;
+  setShowModal: (value: boolean) => void;
+  setShowUpdateModal: (value: boolean) => void;
+  brandId: (value: string) => void;
+}
+
+export default function BrandTable({
+  brandData,
+  deleteBrand,
   setShowModal,
   setShowUpdateModal,
   brandId,
-}: any) {
+}: IBrandTable) {
   return (
     <Box
       background="neutral0"
@@ -39,7 +40,7 @@ export default function TodoTable({
         colCount={4}
         rowCount={10}
         footer={
-          <TFooter onClick={() => setShowModal(true)}>Add a brand</TFooter>
+          <TFooter onClick={() => setShowModal(true)}>Adicionar marca</TFooter>
         }
       >
         <Thead>
@@ -49,19 +50,19 @@ export default function TodoTable({
             </Th>
 
             <Th>
-              <Typography variant="sigma">Name</Typography>
+              <Typography variant="sigma">Nome</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Title</Typography>
+              <Typography variant="sigma">Titulo</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Description</Typography>
+              <Typography variant="sigma">Descrição</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Punctuation</Typography>
+              <Typography variant="sigma">Pontuação</Typography>
             </Th>
 
             <Th>
@@ -71,27 +72,27 @@ export default function TodoTable({
         </Thead>
 
         <Tbody>
-          {todoData.map((todo: any) => {
+          {brandData?.map((brand: any) => {
             return (
-              <Tr key={todo.id}>
+              <Tr key={brand.id}>
                 <Td>
-                  <Typography textColor="neutral800">{todo.id}</Typography>
+                  <Typography textColor="neutral800">{brand.id}</Typography>
                 </Td>
 
                 <Td>
-                  <Typography textColor="neutral800">{todo.name}</Typography>
+                  <Typography textColor="neutral800">{brand.name}</Typography>
                 </Td>
                 <Td>
-                  <Typography textColor="neutral800">{todo.title}</Typography>
+                  <Typography textColor="neutral800">{brand.title}</Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.description}
+                    {brand.description}
                   </Typography>
                 </Td>
                 <Td>
                   <Typography textColor="neutral800">
-                    {todo.punctuation}
+                    {brand.punctuation}
                   </Typography>
                 </Td>
 
@@ -99,44 +100,16 @@ export default function TodoTable({
                   <Button
                     onClick={() => {
                       setShowUpdateModal(true);
-                      brandId(todo.id);
+                      brandId(brand.id);
                     }}
                   >
-                    Edit
+                    Editar
                   </Button>
                 </Td>
 
                 <Td>
-                  <Button onClick={() => deleteTodo(todo.id)}>Delete</Button>
+                  <Button onClick={() => deleteBrand(brand.id)}>Deletar</Button>
                 </Td>
-
-                {/* <Td>
-                  {isEdit ? (
-                    <Flex style={{ justifyContent: "end" }}>
-                      <Button onClick={() => editTodo(todo.id, { name: "" })}>
-                        Save
-                      </Button>
-                    </Flex>
-                  ) : (
-                    <Flex style={{ justifyContent: "end" }}>
-                      <IconButton
-                        onClick={() => setIsEdit(true)}
-                        label="Edit"
-                        noBorder
-                        icon={<></>}
-                      />
-
-                      <Box paddingLeft={1}>
-                        <IconButton
-                          onClick={() => deleteTodo(todo)}
-                          label="Delete"
-                          noBorder
-                          icon={<></>}
-                        />
-                      </Box>
-                    </Flex>
-                  )}
-                </Td> */}
               </Tr>
             );
           })}

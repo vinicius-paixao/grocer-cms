@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import {
   ModalLayout,
   ModalHeader,
@@ -7,11 +7,26 @@ import {
   Typography,
   Button,
   TextInput,
-  NumberInput,
+  // NumberInput,
 } from "@strapi/design-system";
 import { brandsRequest } from "../../api/brands";
 
-export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
+interface IBrandModalUpdate {
+  name: string;
+  title: string;
+  description: string;
+  punctuation: any;
+  similarTerms: string;
+}
+
+interface IUpdateModal {
+  setShowUpdateModal: (value: boolean) => void;
+  id: string;
+  update: (value: boolean) => void;
+}
+
+export default function UpdateModal({ setShowUpdateModal, id, update }: IUpdateModal) {
+  const [allBrands, setAllBrands] = useState<IBrandModalUpdate[]>([]);
   const [brandData, setBrandData] = useState({
     name: "",
     title: "",
@@ -19,8 +34,6 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     punctuation: 0,
     similarTerms: "",
   });
-
-  const [allBrands, setAllBrands] = useState([] as any);
 
   const fetchData = async () => {
     try {
@@ -38,7 +51,7 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
   useEffect(() => {
     const filter = allBrands.filter((brand: any) => brand.id === id);
 
-    console.log({filter})
+    // console.log({ filter });
 
     if (filter) {
       setBrandData({
@@ -51,26 +64,35 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     }
   }, [allBrands]);
 
-  console.log({ allBrands, brandData });
+  // console.log({ allBrands, brandData });
 
-  const handleEdit = (fieldName: any, value: any) => {
+  const handleEdit = (fieldName: string, value: string) => {
     setBrandData((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
     try {
       const response = await brandsRequest.updateBrands(brandData, id);
       console.log("Updated brand:", response);
+      update(true)
       setShowUpdateModal(false);
     } catch (error) {
       console.error("Error updating brand:", error);
     }
+  };
+
+  const fieldNameMap: { [key: string]: string } = {
+    name: "nome",
+    title: "titulo",
+    description: "descrição",
+    punctuation: "pontuação",
+    similarTerms: "termos similares",
   };
 
   return (
@@ -82,23 +104,30 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Add brand
+          Atualizar marca
         </Typography>
       </ModalHeader>
 
       <ModalBody>
-        {Object.entries(brandData).map(([field, value]) => (
-          <TextInput
-            key={field}
-            placeholder={`${field} brand`}
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
-            name={field}
-            value={value}
-            onChange={(e: any) => handleEdit(field, e.target.value)}
-          />
-        ))}
+        {Object.entries(brandData).map(([field, value]) => {
+          const newFieldName = fieldNameMap[field] || field;
+          console.log({ field });
 
-        <NumberInput
+          return (
+            <TextInput
+              key={field}
+              placeholder={`${field} brand`}
+              label={
+                newFieldName.charAt(0).toUpperCase() + newFieldName.slice(1)
+              }
+              name={field}
+              value={value}
+              onChange={(e: any) => handleEdit(field, e.target.value)}
+            />
+          );
+        })}
+
+        {/* <NumberInput
           label="Punctuation"
           placeholder="Punctuation brand"
           aria-label="Punctuation"
@@ -106,7 +135,7 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
           error={undefined}
           onValueChange={(value: number) => handleEdit("punctuation", value)}
           value={brandData.punctuation}
-        />
+        /> */}
       </ModalBody>
 
       <ModalFooter
@@ -115,7 +144,7 @@ export default function TodoModal({ setShowUpdateModal, addTodo, id }: any) {
             Cancel
           </Button>
         }
-        endActions={<Button type="submit">Update brand</Button>}
+        endActions={<Button type="submit">Atualizar marca</Button>}
       />
     </ModalLayout>
   );
