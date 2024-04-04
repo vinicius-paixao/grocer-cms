@@ -2,15 +2,9 @@ import { FC, useEffect, useState } from "react";
 import {
   Layout,
   BaseHeaderLayout,
-  HeaderLayout,
   ContentLayout,
   EmptyStateLayout,
   Button,
-  Tabs,
-  Tab,
-  TabGroup,
-  TabPanels,
-  TabPanel,
   Box,
 } from "@strapi/design-system";
 import CollectionsTable from "../../components/CollectionsTable";
@@ -18,14 +12,6 @@ import axios from "axios";
 import ViewCollection from "../../components/ViewCollection";
 import EditCollection from "../../components/EditCollection";
 import CreateCollection from "../../components/CreateCollection";
-// import EditProduct from "../../components/EditProduct";
-// import CreateProduct from "../../components/CreateProduct";
-// import BrandModal from "../../components/BrandModal";
-// import { productsRequest } from "../../api/products";
-// import BrandModalUpdate from "../../components/BrandModalUpdate";
-// import { ProductCollectionModal } from "../../components/ProductCollectionModal";
-// import { useProductCollection } from "../../context/ProductCollectionContext";
-// import { ProductListTable } from "../../components/ProductCollectionList";
 
 const Products: FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -39,14 +25,11 @@ const Products: FC = () => {
   const fetchData = async () => {
     try {
       const collections = await axios.get("/api/collections");
-      console.log("dasdasd");
-      console.log(allCollections);
-
       const collection = collections.data;
 
       setAllCollections(collection.data);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -60,18 +43,15 @@ const Products: FC = () => {
 
   const handleViewOne = async (id: any) => {
     setViewCollection(true);
-    console.log({ id });
 
     try {
       const collections = await axios.get(`/api/collections/${id}`);
-      console.log("dasdasd");
-      console.log(allCollections);
 
       const collection = collections.data;
 
       setCollection(collection.data);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -96,10 +76,6 @@ const Products: FC = () => {
 
   return (
     <Layout>
-      {/* {showModal && <BrandModal setShowModal={setShowModal} />}
-      {showUpdateModal && (
-        <BrandModalUpdate setShowUpdateModal={setShowUpdateModal} id={id} />
-      )} */}
       <BaseHeaderLayout
         title="Collections"
         subtitle="All yours collections in one place."

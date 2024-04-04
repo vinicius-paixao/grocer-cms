@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 
 import {
   Box,
@@ -34,7 +34,7 @@ export default function TodoTable({ backToCollection }: any) {
       const allProducts = await productsRequest.getAllProducts();
       setAllProducts(allProducts);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -70,12 +70,8 @@ export default function TodoTable({ backToCollection }: any) {
       },
     };
 
-    console.log({ dataToSend });
-
     try {
       await axios.post(`/api/collections`, dataToSend);
-      console.log("Collection created successfully!");
-      // Limpar os campos após a submissão bem-sucedida
       setCollectionInfo({
         title: "",
         init: "",
@@ -85,7 +81,7 @@ export default function TodoTable({ backToCollection }: any) {
       });
       setSelectedProducts([]);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -99,7 +95,6 @@ export default function TodoTable({ backToCollection }: any) {
       const response = await axios.post("/api/upload", formData);
       const data = response.data;
       setCollectionInfo({ ...collectionInfo, banner: data });
-      console.log({ data });
     } catch (error) {
       console.error(error);
     }

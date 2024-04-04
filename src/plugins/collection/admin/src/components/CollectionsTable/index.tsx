@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
@@ -14,30 +12,14 @@ import {
   Th,
   Flex,
 } from "@strapi/design-system";
-// import { productsRequest } from "../../api/products";
 
 export default function TodoTable({
   collectionsData,
-  // collectionEdit,
   collectionView,
   collectionDelete,
-  setShowModal,
   setShowUpdateModal,
   collectionCreate,
 }: any) {
-  const handleSubmit = async (productId: string) => {
-    // try {
-    //   const deletePrdict = await productsRequest.deleteProduct(productId);
-    //   console.log("post");
-    //   console.log(deletePrdict);
-    //   // setShowModal(false);
-    // } catch (e) {
-    //   console.log("error", e);
-    // }
-  };
-
-  console.log({ collectionsData });
-
   return (
     <Box
       background="neutral0"
@@ -53,10 +35,6 @@ export default function TodoTable({
       >
         <Thead>
           <Tr>
-            {/* <Th>
-              <Typography variant="sigma">Imagem</Typography>
-            </Th> */}
-
             <Th>
               <Typography variant="sigma">Title</Typography>
             </Th>
@@ -111,14 +89,6 @@ export default function TodoTable({
                     >
                       View
                     </Button>
-                    {/* <Button
-                      onClick={() => {
-                        setShowUpdateModal(true);
-                        collectionEdit(collection?.id);
-                      }}
-                    >
-                      Edit
-                    </Button> */}
                     <Button
                       variant="danger"
                       onClick={() => {
