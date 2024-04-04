@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 
 import {
   Box,
@@ -33,26 +33,16 @@ export default function TodoTable({ collection, backToView }: any) {
   const fetchData = async () => {
     try {
       const allProducts = await productsRequest.getAllProducts();
-      console.log("dasdasd");
-      console.log(allProducts);
 
       setAllProducts(allProducts);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  const getError = () => {
-    // if (name?.length > 40) {
-    //   return "Content is too long";
-    // }
-
-    return null;
-  };
 
   useEffect(() => {
     if (collection) {
@@ -68,8 +58,6 @@ export default function TodoTable({ collection, backToView }: any) {
       });
     }
   }, [collection]);
-
-  console.log({ collectionInfo });
 
   const handleInputChange = (e: any, key: any) => {
     setCollectionInfo({
@@ -102,15 +90,12 @@ export default function TodoTable({ collection, backToView }: any) {
   };
 
   function formatarData(data: any) {
-    // Cria um objeto Date com a data fornecida
     const dateObj = new Date(data);
 
-    // Extrai o dia, mês e ano do objeto Date
     const dia = String(dateObj.getDate()).padStart(2, "0");
-    const mes = String(dateObj.getMonth() + 1).padStart(2, "0"); // O mês é baseado em zero
+    const mes = String(dateObj.getMonth() + 1).padStart(2, "0");
     const ano = dateObj.getFullYear();
 
-    // Retorna a data formatada no formato "MM/DD/YYYY"
     return `${mes}/${dia}/${ano}`;
   }
 
@@ -133,13 +118,10 @@ export default function TodoTable({ collection, backToView }: any) {
       },
     };
 
-    console.log(dataToSend);
-
     try {
       await axios.put(`/api/collections/${collectionInfo?.id}`, dataToSend);
-      console.log("dasdasd");
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -153,7 +135,6 @@ export default function TodoTable({ collection, backToView }: any) {
       const response = await axios.post("/api/upload", formData);
       const data = response.data;
       setCollectionInfo({ ...collectionInfo, banner: data });
-      console.log({ data });
     } catch (error) {
       console.error(error);
     }
@@ -239,7 +220,6 @@ export default function TodoTable({ collection, backToView }: any) {
           <DatePicker
             label="init"
             onChange={(date: any) => {
-              console.log({ date });
               handleInputChange(
                 { target: { value: formatarData(date) } },
                 "init"
