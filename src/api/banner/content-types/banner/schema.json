@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "banners",
+  "info": {
+    "singularName": "banner",
+    "pluralName": "banners",
+    "displayName": "Banner",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "bannerName": {
+      "type": "string"
+    },
+    "banner": {
+      "displayName": "ImageBanner",
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.image-banner"
+    }
+  }
+}
