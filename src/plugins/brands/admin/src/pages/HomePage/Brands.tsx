@@ -13,10 +13,12 @@ import BrandModal from "../../components/BrandModal";
 import { brandsRequest } from "../../api/brands";
 import BrandModalUpdate from "../../components/BrandModalUpdate";
 import { brandsData } from "../../types/brands";
+import LoginModal from  '../../../../../login/admin/src/components/LoginModal'
 
 const BrandCollection: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showModalLogin, setShowModalLogin] = useState(false);
   const [allBrands, setAllBrands] = useState<brandsData[]>([]);
   const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
@@ -72,9 +74,15 @@ const BrandCollection: FC = () => {
     setId(id);
   }
 
+  const token  =  localStorage.getItem("token");
+
+  const handleCloseModal = () => {
+    setShowModalLogin(false)
+  }
+
   return (
     <Layout>
-      {showModal && (
+      {token ? <>{showModal && (
         <BrandModal setShowModal={setShowModal} update={setCreateReload} />
       )}
       {showUpdateModal && (
@@ -124,7 +132,8 @@ const BrandCollection: FC = () => {
             )}
           </>
         )}
-      </ContentLayout>
+      </ContentLayout></> : <LoginModal/> }
+
     </Layout>
   );
 };
