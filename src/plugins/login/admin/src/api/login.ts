@@ -7,6 +7,8 @@ export const loginRequest = {
       body
     })
   },
+// TODO aplicar o token para o resto
+
   emailCode: async (body: any) => {
     return await request('/login/email/send-code', {
       method: 'POST',
@@ -31,10 +33,13 @@ export const loginRequest = {
       body
     })
   },
-  loginAsAdmin: async (body: any) => {
+  loginAsAdmin: async (body: any, auth: any) => {
     return await request('/login/loginAsAdmin', {
       method: 'POST',
-      body
+      body,
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 }

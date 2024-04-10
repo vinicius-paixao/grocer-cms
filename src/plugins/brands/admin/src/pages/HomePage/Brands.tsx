@@ -13,7 +13,7 @@ import BrandModal from "../../components/BrandModal";
 import { brandsRequest } from "../../api/brands";
 import BrandModalUpdate from "../../components/BrandModalUpdate";
 import { brandsData } from "../../types/brands";
-import LoginModal from  '../../../../../login/admin/src/components/LoginModal'
+import LoginModal from "../../../../../login/admin/src/components/LoginModal";
 
 const BrandCollection: FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -25,15 +25,14 @@ const BrandCollection: FC = () => {
   const [updateReload, setUpdateReload] = useState(false);
   const [createReload, setCreateReload] = useState(false);
 
+  const token = localStorage.getItem("token");
+
   const fetchData = async () => {
     setLoading(true);
 
     try {
       const allbrands = await brandsRequest.getAllBrands();
       setLoading(false);
-
-      // console.log("dasdasd");
-      // console.log(allBrands);
 
       setAllBrands(allbrands);
     } catch (e) {
@@ -46,18 +45,11 @@ const BrandCollection: FC = () => {
     fetchData();
   }, [updateReload, createReload]);
 
-  // console.log({ allBrands });
-
-  // async function toggleTodo(data: any) {
-  //   alert("Add Toggle Todo in API");
-  // }
 
   async function deleteBrand(data: any) {
     // console.log("delete", { data });
     try {
       await brandsRequest.deleteBrands(data);
-      // console.log("delete");
-      // console.log(allbrands);
       fetchData();
       setShowModal(false);
     } catch (e) {
@@ -65,75 +57,74 @@ const BrandCollection: FC = () => {
     }
   }
 
-  // async function editTodo(id: any) {
-  //   alert("Add Edit Todo in API");
-  // }
 
   async function brandId(id: string) {
-    // console.log("dasda", id);
     setId(id);
   }
 
-  const token  =  localStorage.getItem("token");
-
   const handleCloseModal = () => {
-    setShowModalLogin(false)
-  }
+    setShowModalLogin(false);
+  };
 
   return (
     <Layout>
-      {token ? <>{showModal && (
-        <BrandModal setShowModal={setShowModal} update={setCreateReload} />
-      )}
-      {showUpdateModal && (
-        <BrandModalUpdate
-          setShowUpdateModal={setShowUpdateModal}
-          id={id}
-          update={setUpdateReload}
-        />
-      )}
-      <BaseHeaderLayout
-        title="Marcas"
-        subtitle="Todas sua marcas em um local."
-        as="h2"
-      />
-      <ContentLayout>
-        {loading ? (
-          <Box padding={8} background="primary100">
-            <Loader />
-          </Box>
-        ) : (
-          <>
-            {allBrands?.length > 0 ? (
+      {token ? (
+        <>
+          {showModal && (
+            <BrandModal setShowModal={setShowModal} update={setCreateReload} />
+          )}
+          {showUpdateModal && (
+            <BrandModalUpdate
+              setShowUpdateModal={setShowUpdateModal}
+              id={id}
+              update={setUpdateReload}
+            />
+          )}
+          <BaseHeaderLayout
+            title="Marcas"
+            subtitle="Todas sua marcas em um local."
+            as="h2"
+          />
+          <ContentLayout>
+            {loading ? (
               <Box padding={8} background="primary100">
-                <BrandsTable
-                  brandData={allBrands}
-                  setShowModal={setShowModal}
-                  setShowUpdateModal={setShowUpdateModal}
-                  deleteBrand={deleteBrand}
-                  brandId={brandId}
-                />
+                <Loader />
               </Box>
             ) : (
-              <EmptyStateLayout
-                icon={""}
-                content="Não ha nenhuma marca cadastrada..."
-                action={
-                  <Button
-                    onClick={() => {
-                      setShowModal(true);
-                    }}
-                    variant="secondary"
-                  >
-                    Adicionar marca
-                  </Button>
-                }
-              />
+              <>
+                {allBrands?.length > 0 ? (
+                  <Box padding={8} background="primary100">
+                    <BrandsTable
+                      brandData={allBrands}
+                      setShowModal={setShowModal}
+                      setShowUpdateModal={setShowUpdateModal}
+                      deleteBrand={deleteBrand}
+                      brandId={brandId}
+                    />
+                  </Box>
+                ) : (
+                  <EmptyStateLayout
+                    icon={""}
+                    content="Não ha nenhuma marca cadastrada..."
+                    action={
+                      <Button
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                        variant="secondary"
+                      >
+                        Adicionar marca
+                      </Button>
+                    }
+                  />
+                )}
+              </>
             )}
-          </>
-        )}
-      </ContentLayout></> : <LoginModal/> }
-
+          </ContentLayout>
+        </>
+      ) : (
+        <LoginModal />
+      )}
     </Layout>
   );
 };

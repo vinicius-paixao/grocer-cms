@@ -2,42 +2,44 @@ import { Strapi } from '@strapi/strapi';
 
 export default ({ strapi }: { strapi: Strapi }) => ({
   async findAll(ctx) {
+    const authToken = ctx.request.headers.authtoken
+
     try {
       const allusers = await strapi
         .plugin('users')
         .service('usersService')
-        .findAll()
+        .findAll(authToken)
 
       ctx.body = allusers
     } catch (error) {
-      ctx.status = 500;
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async findCurrentUser(ctx) {
+    const authToken = ctx.request.headers.authtoken
+
     try {
       const allusers = await strapi
         .plugin('users')
         .service('usersService')
-        .findCurrentUser()
+        .findCurrentUser(authToken)
 
       ctx.body = allusers
     } catch (error) {
-      ctx.status = 500;
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async update(ctx) {
     const requestData = ctx.request.body;
-    // const id = ctx.params.id
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const updateUser = await strapi
         .plugin('users')
         .service('usersService')
-        .update(requestData);
+        .update(requestData, authToken);
 
       ctx.status = 200
       ctx.body = updateUser
@@ -46,20 +48,20 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'user atualizado com sucesso',
       });
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async passwrdRecovery(ctx) {
     const requestData = ctx.request.body;
     const id = ctx.params.id
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const passwrdRecoveryUser = await strapi
         .plugin('users')
         .service('usersService')
-        .passwrdRecovery(requestData, id);
+        .passwrdRecovery(requestData, id, authToken);
 
       ctx.status = 200
       ctx.body = passwrdRecoveryUser
@@ -68,20 +70,20 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'user atualizado com sucesso',
       });
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async passwrdChange(ctx) {
     const requestData = ctx.request.body;
     const id = ctx.params.id
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const passwrdChangeUser = await strapi
         .plugin('users')
         .service('usersService')
-        .passwrdChange(requestData, id);
+        .passwrdChange(requestData, id, authToken);
 
       ctx.status = 200
       ctx.body = passwrdChangeUser
@@ -90,19 +92,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'user atualizado com sucesso',
       });
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async signup(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const signupUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .signup(requestData);
+        .signup(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -111,19 +113,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = signupUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async checkEmail(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const checkEmailUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .checkEmail(requestData);
+        .checkEmail(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -132,19 +134,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = checkEmailUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async checkDocument(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const checkDocumentUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .checkDocument(requestData);
+        .checkDocument(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -153,19 +155,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = checkDocumentUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async checkPhone(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const checkPhoneUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .checkPhone(requestData);
+        .checkPhone(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -174,19 +176,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = checkPhoneUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async passwrdReset(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const passwrdResetUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .passwrdReset(requestData);
+        .passwrdReset(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -195,19 +197,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = passwrdResetUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async passwrdResetCode(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const passwrdResetCodeUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .passwrdResetCode(requestData);
+        .passwrdResetCode(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -216,19 +218,19 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = passwrdResetCodeUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 
   async userEdit(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const userEditUsers = await strapi
         .plugin('users')
         .service('usersService')
-        .userEdit(requestData);
+        .userEdit(requestData, authToken);
 
       ctx.send({
         message: 'User criado com sucesso',
@@ -237,8 +239,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = userEditUsers
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 });

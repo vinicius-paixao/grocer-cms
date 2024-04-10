@@ -17,8 +17,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = login
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
   async loginEmailCode(ctx) {
@@ -37,8 +36,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = loginEmailCode
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
   async loginEmail(ctx) {
@@ -57,8 +55,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = loginEmail
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
   async loginSmsCode(ctx) {
@@ -77,8 +74,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = loginSmsCode
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
   async loginSms(ctx) {
@@ -97,18 +93,18 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = loginSms
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
   async loginAsAdmin(ctx) {
     const requestData = ctx.request.body;
+    const authToken = ctx.request.headers.authtoken
 
     try {
       const loginAsAdmin = await strapi
         .plugin('login')
         .service('loginService')
-        .loginAsAdmin(requestData);
+        .loginAsAdmin(requestData, authToken);
 
       ctx.send({
         message: 'sucesso',
@@ -117,8 +113,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.status = 200
       ctx.body = loginAsAdmin
     } catch (error) {
-      ctx.status = 500
-      ctx.body = 'Internal error'
+      ctx.throw(500, error);
     }
   },
 });
