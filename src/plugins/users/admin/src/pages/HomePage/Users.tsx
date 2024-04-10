@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from "react";
 import {
   Layout,
   BaseHeaderLayout,
-  HeaderLayout,
   ContentLayout,
   EmptyStateLayout,
   Button,
@@ -13,50 +12,55 @@ import {
   TabPanel,
   Box,
 } from "@strapi/design-system";
+import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import UsersTable from "../../components/UsersTable";
-// import BrandModal from "../../components/BrandModal";
 import { usersRequest } from "../../api/users";
-import {loginRequest} from "../../../../../login/admin/src/api/login"
+import { loginRequest } from "../../../../../login/admin/src/api/login";
 import UserUpdate from "../../components/UserUpdate";
 import AllUsers from "../../components/AllUsers";
 import AddUser from "../../components/AddUser";
-// import SalesChannelModal from "../../components/SalesChannelModal";
-// import BrandModalUpdate from "../../components/BrandModalUpdate";
-// import { ProductCollectionModal } from "../../components/ProductCollectionModal";
-// import { useProductCollection } from "../../context/ProductCollectionContext";
-// import { ProductListTable } from "../../components/ProductCollectionList";
+import LoginModal from "../../../../../login/admin/src/components/LoginModal";
+import { IAdmin, IClients } from "../../types/clientes";
 
 const ProductCollection: FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [users, setUsers] = useState({});
-  const [allUsers, setAllUsers] = useState([]);
-  const [showModalUpdate, setShowModalUpdate] = useState(false)
-  const [userEdit, setUserEdit] = useState({} as any)
-  const [token, setToken] = useState('')
-  // const [showUpdateModal, setShowUpdateModal] = useState(false);
-  // const [id, setId] = useState("");
+  const [users, setUsers] = useState<IAdmin>({} as IAdmin);
+  const [allClients, setAllClients] = useState<IClients[]>([]);
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const [userEdit, setUserEdit] = useState({} as any);
+  const [token, setToken] = useState("");
+  const [reload, setReload] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [changeTitle, setChangeTitle] = useState({
+    title: "Informações do usuario",
+    description: "informaçoes do usuario gerente da conta.",
+  });
+
+  const authToken = localStorage.getItem("token");
 
   const fetchDataAllUsers = async () => {
+    setLoading(true);
     try {
-      const allUsers = await usersRequest.allUsers();
-      console.log("dasdasd");
-      console.log(allUsers);
+      const allUsers = await usersRequest.allUsers(authToken);
+      setLoading(false);
 
-      setAllUsers(allUsers);
+      setAllClients(allUsers);
     } catch (e) {
+      setLoading(false);
       console.log("error", e);
     }
   };
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      const users = await usersRequest.currentUser();
-      console.log("dasdasd");
-      console.log(users);
+      const users = await usersRequest.currentUser(authToken);
+      setLoading(false);
 
       setUsers(users);
     } catch (e) {
+      setLoading(false);
       console.log("error", e);
     }
   };
@@ -64,124 +68,123 @@ const ProductCollection: FC = () => {
   useEffect(() => {
     fetchData();
     fetchDataAllUsers();
-  }, []);
+  }, [reload]);
 
-  const handleUserInfoEdit =async (id: string, user: any) => {
-    setShowModalUpdate(true)
-    setUserEdit(user)
+  const handleUserInfoEdit = async (id: string, user: any) => {
+    setShowModalUpdate(true);
+    setUserEdit(user);
+    setLoading(true);
 
-    console.log({id, user})
-    const body  = {
-      contractAccountId: id
-    }
+    const body = {
+      contractAccountId: id,
+    };
 
     try {
-      const usersAsAdmin = await loginRequest.loginAsAdmin(body);
-      console.log({usersAsAdmin});
-      setToken(usersAsAdmin.token)
-
-      // setUsers(usersAsAdmin);
+      const usersAsAdmin = await loginRequest.loginAsAdmin(body, authToken);
+      setToken(usersAsAdmin.token);
+      setLoading(false);
     } catch (e) {
-      setShowModalUpdate(false)
+      setShowModalUpdate(false);
+      setLoading(false);
       console.log("error", e);
     }
-   }
+  };
+  console.log({ reload });
 
-  // async function toggleTodo(data: any) {
-  //   alert("Add Toggle Todo in API");
-  // }
-
-  // async function deleteTodo(data: any) {
-  //   console.log("delete", { data });
-  //   // try {
-  //   //   const allbrands = await brandsRequest.deleteBrands(data);
-  //   //   console.log("delete");
-  //   //   console.log(allbrands);
-  //   //   setShowModal(false);
-  //   // } catch (e) {
-  //   //   console.log("error", e);
-  //   // }
-  // }
-
-  // async function editTodo(id: any) {
-  //   alert("Add Edit Todo in API");
-  // }
-
-  // async function brandId(id: any) {
-  //   console.log("dasda", id);
-  //   setId(id);
-  // }
+  if (loading) return <LoadingIndicatorPage />;
 
   return (
     <Layout>
-      {showModal && (
-        <UserUpdate setShowUpdateModal={setShowModal} users={users} userEdit={false}/>
-      )}
+      {authToken ? (
+        <>
+          {showModal && (
+            <UserUpdate
+              setShowUpdateModal={setShowModal}
+              users={users}
+              userEdit={false}
+            />
+          )}
+          {showModalUpdate && (
+            <UserUpdate
+              setShowUpdateModal={setShowModalUpdate}
+              users={userEdit}
+              userEdit={true}
+              token={token}
+            />
+          )}
+          {showAddModal && (
+            <AddUser
+              setShowAddModal={setShowAddModal}
+              hasReload={() =>setReload(true)}
+            />
+          )}
+          <BaseHeaderLayout
+            title={changeTitle.title}
+            subtitle={changeTitle.description}
+            as="h2"
+          />
+          <TabGroup
+            label="Some stuff for the label"
+            id="tabs"
+            onTabChange={(result: number) => {
+              const title =
+                result == 0 ? "Informações do usuario" : "Todos clientes";
 
-      {showModalUpdate && (
-        <UserUpdate setShowUpdateModal={setShowModalUpdate} users={userEdit} userEdit={true} token={token}/>
-      )}
+              const description =
+                result == 0
+                  ? "Informações do usuario"
+                  : "informações de clientes";
 
-      {showAddModal && <AddUser setShowAddModal={setShowAddModal} />}
-
-      <BaseHeaderLayout
-        title="User Info"
-        subtitle="All your users in one place."
-        as="h2"
-      />
-
-      <TabGroup
-        label="Some stuff for the label"
-        id="tabs"
-        onTabChange={(selected: any) => console.log(selected)}
-      >
-        <Tabs>
-          <Tab>User Info</Tab>
-          {allUsers?.length > 0 && <Tab>All Users</Tab>}
-        </Tabs>
-        <TabPanels>
-          <TabPanel>
-            {/* <Box color="neutral800" padding={4} background="neutral0"> */}
-            <ContentLayout>
-              {users ? (
+              setChangeTitle({
+                title,
+                description,
+              });
+            }}
+          >
+            <Tabs>
+              <Tab>Informações do usuario</Tab>
+              {allClients?.length > 0 && <Tab>Todos clientes</Tab>}
+            </Tabs>
+            <TabPanels>
+              <TabPanel>
+                <ContentLayout>
+                  {users ? (
+                    <Box padding={8} background="primary100">
+                      <UsersTable
+                        users={users}
+                        setShowModal={setShowModal}
+                        setShowAddModal={setShowAddModal}
+                      />
+                    </Box>
+                  ) : (
+                    <EmptyStateLayout
+                      icon={""}
+                      content="Não foi possivel carregar..."
+                      action={
+                        <Button
+                          onClick={() => {
+                            setShowAddModal(true);
+                          }}
+                          variant="secondary"
+                        >
+                          Adicionar Usuario
+                        </Button>
+                      }
+                    />
+                  )}
+                </ContentLayout>
+              </TabPanel>
+              <TabPanel>
                 <Box padding={8} background="primary100">
-                  <UsersTable
-                    users={users}
-                    setShowModal={setShowModal}
-                    setShowAddModal={setShowAddModal}
-                    // setShowUpdateModal={setShowUpdateModal}
-                    // toggleTodo={toggleTodo}
-                    // deleteSC={deleteTodo}
-                    // editTodo={editTodo}
-                    // brandId={brandId}
-                  />
+                  <AllUsers users={allClients} editUser={handleUserInfoEdit} />
                 </Box>
-              ) : (
-                <EmptyStateLayout
-                  icon={""}
-                  content="You don't have any brands yet..."
-                  action={
-                    <Button
-                      onClick={() => {
-                        setShowAddModal(true);
-                      }}
-                      variant="secondary"
-                    >
-                      Add brand
-                    </Button>
-                  }
-                />
-              )}
-            </ContentLayout>
-            {/* </Box> */}
-          </TabPanel>
-          <TabPanel>
-            <Box padding={8} background="primary100">
-              <AllUsers users={allUsers} editUser={handleUserInfoEdit}/>
-            </Box>
-          </TabPanel>
-        </TabPanels>
-      </TabGroup>
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </>
+      ) : (
+        <LoginModal />
+      )}
     </Layout>
   );
 };

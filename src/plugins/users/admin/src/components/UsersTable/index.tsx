@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import {
   Box,
   Button,
@@ -13,20 +11,19 @@ import {
   Td,
   Th,
 } from "@strapi/design-system";
-// import Pencil from "@strapi/icons";
-// import Trash from "@strapi/icons";
-// import Plus from "@strapi/icons/Plus";
-// import { brandsRequest } from "../../api/brands";
+import { IAdmin } from "../../types/clientes";
 
-export default function TodoTable({
+interface IUserAdmin {
+  users: IAdmin;
+  setShowModal: (show: boolean) => void;
+  setShowAddModal: (show: boolean) => void;
+}
+
+export default function UserAdmin({
   users,
-  // toggleTodo,
-  // deleteSC,
-  // editTodo,
   setShowModal,
   setShowAddModal,
-  // brandId,
-}: any) {
+}: IUserAdmin) {
   return (
     <Box
       background="neutral0"
@@ -39,25 +36,27 @@ export default function TodoTable({
         colCount={4}
         rowCount={10}
         footer={
-          <TFooter onClick={() => setShowAddModal(true)}>Add new user</TFooter>
+          <TFooter onClick={() => setShowAddModal(true)}>
+            Adicionar cliente
+          </TFooter>
         }
       >
         <Thead>
           <Tr>
             <Th>
-              <Typography variant="sigma">Active</Typography>
+              <Typography variant="sigma">Ativo</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">FirstName</Typography>
+              <Typography variant="sigma">nome</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">Email</Typography>
+              <Typography variant="sigma">E-mail</Typography>
             </Th>
 
             <Th>
-              <Typography variant="sigma">PhoneNumber</Typography>
+              <Typography variant="sigma">telefone</Typography>
             </Th>
 
             <Th>
@@ -67,40 +66,35 @@ export default function TodoTable({
         </Thead>
 
         <Tbody>
-          {/* {users.map((user: any) => { */}
-            {/* return ( */}
-              <Tr key={users.id}>
-                <Td>
-                  <Typography textColor="neutral800">{users.active ? 'True': 'False'}</Typography>
-                </Td>
+          <Tr key={users.document}>
+            <Td>
+              <Typography textColor="neutral800">
+                {users.active ? "True" : "False"}
+              </Typography>
+            </Td>
 
-                <Td>
-                  <Typography textColor="neutral800">{users.firstName}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{users.email}</Typography>
-                </Td>
-                <Td>
-                  <Typography textColor="neutral800">{users.phoneNumber}</Typography>
-                </Td>
+            <Td>
+              <Typography textColor="neutral800">{users.firstName}</Typography>
+            </Td>
+            <Td>
+              <Typography textColor="neutral800">{users.email}</Typography>
+            </Td>
+            <Td>
+              <Typography textColor="neutral800">
+                {users.phoneNumber}
+              </Typography>
+            </Td>
 
-                <Td>
-                  <Button
-                    onClick={() => {
-                      setShowModal(true);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </Td>
-
-                {/* <Td>
-                  <Button onClick={() => deleteSC(sc.id)}>Delete</Button>
-                </Td> */}
-
-              </Tr>
-            {/* ); */}
-          {/* })} */}
+            <Td>
+              <Button
+                onClick={() => {
+                  setShowModal(true);
+                }}
+              >
+                Editar
+              </Button>
+            </Td>
+          </Tr>
         </Tbody>
       </Table>
     </Box>

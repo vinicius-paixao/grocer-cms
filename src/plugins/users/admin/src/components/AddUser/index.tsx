@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   ModalLayout,
   ModalHeader,
@@ -7,11 +7,17 @@ import {
   Typography,
   Button,
   TextInput,
-  NumberInput,
+  DatePicker,
+  ToggleInput,
 } from "@strapi/design-system";
 import { usersRequest } from "../../api/users";
 
-export default function TodoModal({ setShowAddModal }: any) {
+interface IAddUser {
+  setShowAddModal: (value: boolean) => void;
+  hasReload: (value: boolean) => void;
+}
+
+export default function AddUser({ setShowAddModal, hasReload }: IAddUser) {
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -23,53 +29,15 @@ export default function TodoModal({ setShowAddModal }: any) {
     active: true,
   });
 
-  // const [allBrands, setAllBrands] = useState([] as any);
+  const authToken = localStorage.getItem("token");
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await usersRequest.updateusers();
-  //     setAllBrands(response);
-  //   } catch (error) {
-  //     console.error("Error fetching brands:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // useEffect(() => {
-  //   const filter = allBrands.filter((brand: any) => brand.id === id);
-
-  //   console.log({filter})
-
-  //   if (filter) {
-  //     setBrandData({
-  //       name: "" || filter[0]?.name,
-  //       title: "" || filter[0]?.title,
-  //       description: "" || filter[0]?.description,
-  //       punctuation: 0 || filter[0]?.punctuation,
-  //       similarTerms: "" || filter[0]?.similarTerms,
-  //     });
-  //   }
-  // }, [allBrands]);
-
-  // console.log({ allBrands, brandData });
-
-  const handleEdit = (fieldName: any, value: any) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    hasReload(true)
 
     try {
-      const response = await usersRequest.signupUser(userData);
-      console.log("Updated brand:", response);
+      await usersRequest.signupUser(userData, authToken);
       setShowAddModal(false);
     } catch (error) {
       console.error("Error updating brand:", error);
@@ -85,40 +53,101 @@ export default function TodoModal({ setShowAddModal }: any) {
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Update User
+          Atualizar dados do usuario
         </Typography>
       </ModalHeader>
 
       <ModalBody>
-        {Object.entries(userData).map(([field, value]) => (
-          <TextInput
-            key={field}
-            placeholder={`${field} brand`}
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
-            name={field}
-            value={value}
-            onChange={(e: any) => handleEdit(field, e.target.value)}
-          />
-        ))}
+        <TextInput
+          key={"nome"}
+          placeholder={`nome do cliente`}
+          label="nome"
+          name="nome"
+          value={userData.firstName}
+          onChange={(e: any) =>
+            setUserData({ ...userData, firstName: e.target.value })
+          }
+        />
+        <TextInput
+          key={"ultimo nome"}
+          placeholder={`ultimo nome do cliente`}
+          label="ultimo nome"
+          name="ultimo nome"
+          value={userData.lastName}
+          onChange={(e: any) =>
+            setUserData({ ...userData, lastName: e.target.value })
+          }
+        />
+        <DatePicker
+          label="inicio"
+          onChange={(date: any) => {
+            console.log({ date });
+            setUserData({ ...userData, birthDate: date });
+          }}
+          selectedDate={userData.birthDate}
+        />
+        <TextInput
+          key={"documento"}
+          placeholder={`documento do cliente`}
+          label="documento"
+          name="documento"
+          value={userData.document}
+          onChange={(e: any) =>
+            setUserData({ ...userData, document: e.target.value })
+          }
+        />{" "}
+        <TextInput
+          key={"senha"}
+          placeholder={`senha do cliente`}
+          label="senha"
+          name="senha"
+          type="password"
+          value={userData.password}
+          onChange={(e: any) =>
+            setUserData({ ...userData, password: e.target.value })
+          }
+        />
+        <TextInput
+          key={"email"}
+          placeholder={`email do cliente`}
+          label="email"
+          name="email"
+          value={userData.email}
+          onChange={(e: any) =>
+            setUserData({ ...userData, email: e.target.value })
+          }
+          style={{ marginBottom: "10px" }}
+        />
+        <TextInput
+          key={"telefone"}
+          placeholder={`(11) 0000-0000`}
+          label="telefone"
+          name="telefone"
+          value={userData.phoneNumber}
+          onChange={(e: any) =>
+            setUserData({ ...userData, phoneNumber: e.target.value })
+          }
+        />
 
-        {/* <NumberInput
-          label="Punctuation"
-          placeholder="Punctuation brand"
-          aria-label="Punctuation"
-          name="Punctuation"
-          error={undefined}
-          onValueChange={(value: number) => handleEdit("punctuation", value)}
-          value={userData.punctuation}
-        /> */}
+        <ToggleInput
+          size="S"
+          aria-label="Enabled"
+          onLabel="Ativar"
+          offLabel="Desativar"
+          checked={userData.active}
+          onChange={(e: any) =>
+            setUserData({ ...userData, active: e.target.checked })
+          }
+        />
       </ModalBody>
 
       <ModalFooter
         startActions={
           <Button onClick={() => setShowAddModal(false)} variant="tertiary">
-            Cancel
+            Cancelar
           </Button>
         }
-        endActions={<Button type="submit">Update User</Button>}
+        endActions={<Button type="submit">Criar</Button>}
       />
     </ModalLayout>
   );
