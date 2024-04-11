@@ -14,12 +14,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = login.status ?? 200
       ctx.body = login
     } catch (error) {
       ctx.throw(500, error);
     }
   },
+
   async loginEmailCode(ctx) {
     const requestData = ctx.request.body;
 
@@ -33,12 +34,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = loginEmailCode.status
       ctx.body = loginEmailCode
     } catch (error) {
       ctx.throw(500, error);
     }
   },
+
   async loginEmail(ctx) {
     const requestData = ctx.request.body;
 
@@ -52,12 +54,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = loginEmail.login
       ctx.body = loginEmail
     } catch (error) {
       ctx.throw(500, error);
     }
   },
+
   async loginSmsCode(ctx) {
     const requestData = ctx.request.body;
 
@@ -71,12 +74,13 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = loginSmsCode.status
       ctx.body = loginSmsCode
     } catch (error) {
       ctx.throw(500, error);
     }
   },
+
   async loginSms(ctx) {
     const requestData = ctx.request.body;
 
@@ -90,27 +94,34 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = loginSms.status;
       ctx.body = loginSms
     } catch (error) {
       ctx.throw(500, error);
     }
   },
+
   async loginAsAdmin(ctx) {
     const requestData = ctx.request.body;
     const authToken = ctx.request.headers.authtoken
 
     try {
+      if (!requestData || !authToken) {
+        ctx.throw(400, "Dados de entrada incompletos.");
+      }
+
       const loginAsAdmin = await strapi
         .plugin('login')
         .service('loginService')
         .loginAsAdmin(requestData, authToken);
 
+      console.log(loginAsAdmin)
+
       ctx.send({
         message: 'sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = loginAsAdmin.status;
       ctx.body = loginAsAdmin
     } catch (error) {
       ctx.throw(500, error);

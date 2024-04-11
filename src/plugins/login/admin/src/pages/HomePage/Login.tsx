@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { Button, Flex, TextInput, Loader } from "@strapi/design-system";
+import {
+  Button,
+  Flex,
+  TextInput,
+  Loader,
+  Typography,
+  Box,
+} from "@strapi/design-system";
 import { loginRequest } from "../../api/login";
 
 export default function Login() {
   const [login, setLogin] = useState({} as any);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({} as any);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -18,14 +26,17 @@ export default function Login() {
       localStorage.setItem("token", login?.token);
       setIsLoading(false);
       window.location.reload();
-    } catch (e) {
+    } catch (e: any) {
       setIsLoading(false);
-      console.log("error", e);
+      console.error("error", e.response.payload);
+      setError(e.response.payload);
     }
   };
 
+  console.log(error)
+
   return (
-    <>
+    <Box maxHeight="300px">
       <Flex maxWidth="1000px" marginTop="20px" justifyContent="center">
         <TextInput
           placeholder="login"
@@ -46,16 +57,41 @@ export default function Login() {
           placeholder="password"
           label="password"
           name="text"
-          // error={getError()}
+          type="password"
           onChange={(e: any) =>
             setLogin({ ...login, password: e.target.value })
           }
           value={login.password}
         />
-        <Button onClick={handleSubmit} varinat="tertiary">
-          {isLoading ? <Loader small /> : "Login"}
-        </Button>
+
+        <Flex
+          maxWidth="1000px"
+          marginTop="20px"
+          justifyContent="center"
+          direction="column"
+        >
+          {error && (
+            <Typography textColor="danger600" lineHeight="20px" fontSize="10px">
+              {error?.detail || error?.error?.message}
+            </Typography>
+          )}
+        </Flex>
+
+        <Flex
+          maxWidth="1000px"
+          marginTop="20px"
+          justifyContent="center"
+          direction="column"
+        >
+          {isLoading ? (
+            <Loader small />
+          ) : (
+            <Button onClick={handleSubmit} varinat="tertiary">
+              Login
+            </Button>
+          )}
+        </Flex>
       </Flex>
-    </>
+    </Box>
   );
 }

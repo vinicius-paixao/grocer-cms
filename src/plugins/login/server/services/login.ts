@@ -15,12 +15,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       const response = await axios.post(`${baseUrl}`, body, { headers: { ...defaultHeaders, Authorization: auth } });
       const loginResponse = response.data;
 
-      console.log('Dados recebidos:', body);
-
       return loginResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
   async loginAsAdmin(body: any, auth: string) {
@@ -32,9 +31,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return loginResponse;
     } catch (error) {
-      const { status, statusText, detail } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText, detail });
-      return { status, statusText, detail }
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
   async loginEmailCode(body: any, auth: string) {
@@ -46,8 +45,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return loginResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
   async loginEmail(body: any, auth: string) {
@@ -59,8 +59,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return loginResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
   async loginSmsCode(body: any, auth: string) {
@@ -72,8 +73,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return loginResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
   async loginSms(body: any, auth: string) {
@@ -85,8 +87,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return loginResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 });

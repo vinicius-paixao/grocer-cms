@@ -362,89 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiCollectionCollection extends Schema.CollectionType {
-  collectionName: 'collections';
-  info: {
-    singularName: 'collection';
-    pluralName: 'collections';
-    displayName: 'collection';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-  };
-  attributes: {
-    title: Attribute.String;
-    init: Attribute.Date;
-    end: Attribute.Date;
-    products: Attribute.JSON;
-    banner: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::collection.collection',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::collection.collection',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiSliderSlider extends Schema.CollectionType {
-  collectionName: 'sliders';
-  info: {
-    singularName: 'slider';
-    pluralName: 'sliders';
-    displayName: 'slider';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-    banner: Attribute.Component<'ui.banner', true>;
-    active: Attribute.Boolean & Attribute.DefaultTo<false>;
-    pagination: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<true>;
-    arrows: Attribute.Boolean & Attribute.Required & Attribute.DefaultTo<true>;
-    infinite: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<true>;
-    show_title: Attribute.Boolean &
-      Attribute.Required &
-      Attribute.DefaultTo<true>;
-    background: Attribute.Media;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::slider.slider',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::slider.slider',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -912,6 +829,11 @@ export interface ApiCollectionCollection extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
   };
   attributes: {
     title: Attribute.String;
