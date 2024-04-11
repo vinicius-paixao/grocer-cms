@@ -32,11 +32,42 @@ export default function CollectionViewTable({
       padding={8}
       style={{ marginTop: "10px" }}
     >
+      <Flex gap={"50px"} marginBottom="20px" direction="column">
+        <Typography variant="delta" textColor="neutral800">
+          Banner da Coleçao
+        </Typography>
+        {collection?.attributes?.banner && (
+          <Flex>
+            <img
+              height="200px"
+              width="1200px"
+              className=""
+              src={`http://localhost:1337${collection?.attributes?.banner[0]?.url}`}
+              alt="Preview"
+            />
+          </Flex>
+        )}
+      </Flex>
+
       <Flex
         gap={"50px"}
         justifyContent="space-between"
         maxWidth="500px"
-        marginTop="20px"
+        marginBottom="20px"
+      >
+        <Typography variant="delta" textColor="neutral800">
+          Nome da coleção:
+        </Typography>
+        <Typography variant="sigma" textColor="neutral800">
+          {collection?.attributes?.title}
+        </Typography>
+      </Flex>
+
+      <Flex
+        gap={"50px"}
+        justifyContent="space-between"
+        maxWidth="500px"
+        marginBottom="20px"
       >
         <Typography variant="delta" textColor="neutral800">
           Id da coleção:
@@ -50,7 +81,7 @@ export default function CollectionViewTable({
         gap={"50px"}
         justifyContent="space-between"
         maxWidth="500px"
-        marginTop="20px"
+        marginBottom="20px"
       >
         <Typography variant="delta" textColor="neutral800">
           inicio:
@@ -79,60 +110,70 @@ export default function CollectionViewTable({
         rowCount={10}
         footer={<TFooter onClick={collectionEdit}>Editar Coleção</TFooter>}
       >
-        <Thead>
-          <Tr>
-            <Th>
-              <Typography variant="sigma">nome da coleção</Typography>
-            </Th>
+        {collection?.attributes?.products.length > 0 ? (
+          <>
+            <Thead>
+              <Tr>
+                <Th>
+                  <Typography variant="sigma">nome da coleção</Typography>
+                </Th>
 
-            <Th>
-              <Typography variant="sigma">id</Typography>
-            </Th>
+                <Th>
+                  <Typography variant="sigma">id</Typography>
+                </Th>
 
-            <Th>
-              <Typography variant="sigma">ativo</Typography>
-            </Th>
+                <Th>
+                  <Typography variant="sigma">ativo</Typography>
+                </Th>
 
-            <Th>
-              <Typography variant="sigma">categoria</Typography>
-            </Th>
-          </Tr>
-        </Thead>
-
-        <Tbody>
-          {collection?.attributes?.products?.map((collection: any) => {
-            return (
-              <Tr key={collection?.id}>
-                <Td>
-                  <Typography textColor="neutral800">
-                    {collection?.name}
-                  </Typography>
-                </Td>
-
-                <Td>
-                  <Typography textColor="neutral800">
-                    {collection?.id}
-                  </Typography>
-                </Td>
-
-                <Td>
-                  <Typography textColor="neutral800">
-                    {collection?.active ? "True" : "False"}
-                  </Typography>
-                </Td>
-
-                <Td>
-                  <Typography textColor="neutral800">
-                    {collection?.category}
-                  </Typography>
-                </Td>
+                <Th>
+                  <Typography variant="sigma">categoria</Typography>
+                </Th>
               </Tr>
-            );
-          })}
-        </Tbody>
+            </Thead>
+
+            <Tbody>
+              {collection?.attributes?.products?.map((collection: any) => {
+                return (
+                  <Tr key={collection?.id}>
+                    <Td>
+                      <Typography textColor="neutral800">
+                        {collection?.name}
+                      </Typography>
+                    </Td>
+
+                    <Td>
+                      <Typography textColor="neutral800">
+                        {collection?.id}
+                      </Typography>
+                    </Td>
+
+                    <Td>
+                      <Typography textColor="neutral800">
+                        {collection?.active ? "True" : "False"}
+                      </Typography>
+                    </Td>
+
+                    <Td>
+                      <Typography textColor="neutral800">
+                        {collection?.category}
+                      </Typography>
+                    </Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </>
+        ) : (
+          <Flex alignItems="center" gap={11}>
+            <Typography variant="sigma" padding="20px">
+              Não ha produtos cadastrados
+            </Typography>
+          </Flex>
+        )}
       </Table>
 
-      <Flex alignItems="stretch" gap={11} marginBottom="20px">
+      <Flex alignItems="stretch" gap={11} marginTop="20px">
         <Button onClick={backToCollection}>Voltar para visualização</Button>
       </Flex>
     </Box>

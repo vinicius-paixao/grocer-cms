@@ -7,49 +7,70 @@ export const productsRequest = {
     })
   },
 
-  getProduct: async () => {
+  getProduct: async (auth: any) => {
     return await request('/products/oneProduct/:id', {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  getProductByName: async () => {
+  getProductByName: async (auth: any) => {
     return await request('/products/search/:name', {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  setProduct: async (body: any) => {
+  setProduct: async (body: any,auth: any) => {
     return await request('/products/productsCreate', {
       method: 'POST',
-      body
+      body,
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  updateProduct: async (body: any, id: any) => {
+  updateProduct: async (body: any, id: any, auth: any) => {
     return await request(`/products/productsUpdate/${id}`, {
       method: 'PUT',
-      body
+      body,
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  updateFieldEnable: async (body: any, id: any) => {
+  updateFieldEnable: async (body: any, id: any, auth: any) => {
     return await request(`/products/updateFieldEnable/${id}`, {
       method: 'PATCH',
-      body
+      body,
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  updateFieldDesable: async (body: any, id: any) => {
+  updateFieldDesable: async (body: any, id: any, auth: any) => {
     return await request(`/products/updateFieldDesable/${id}`, {
       method: 'PATCH',
-      body
+      body,
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   },
 
-  deleteProduct: async (id: any) => {
+  deleteProduct: async (id: any, auth: any) => {
     return await request(`/products/deleteProduct/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        authtoken: `Bearer ${auth}`
+      }
     })
   }
 }

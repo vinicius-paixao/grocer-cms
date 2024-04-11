@@ -88,7 +88,7 @@ export default function CollectionsTable({
                 </Td>
 
                 <Td>
-                  <Flex>
+                  <Flex gap="5px">
                     <Button
                       onClick={() => {
                         collectionView(collection?.id);

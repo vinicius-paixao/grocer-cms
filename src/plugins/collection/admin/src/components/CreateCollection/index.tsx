@@ -13,6 +13,7 @@ import {
   Flex,
   TextInput,
   DatePicker,
+  VisuallyHidden,
 } from "@strapi/design-system";
 import { productsRequest } from "../../../../../products/admin/src/api/products";
 import axios from "axios";
@@ -125,39 +126,49 @@ export default function CreateCollectionTable({
         gap={"50px"}
         justifyContent="space-between"
         maxWidth="500px"
-        marginTop="20px"
+        marginBottom="20px"
       >
         <Typography variant="delta" textColor="neutral800">
           Banner Collection
         </Typography>
-        <div className="">
-          <input
-            type="file"
-            id={`fileInput`}
-            className="hidden"
-            accept="image/*"
-            onChange={(e) => {
-              setImage(e);
-            }}
-          />
-          <div>
-            <button className="" onClick={handleFileButtonClick}>
-              <img src="./cms/icon_image.svg" alt="" />
-              <p>Adicione fotos ao seu projeto</p>
-            </button>
-          </div>
-        </div>
+
+        <Flex
+          direction="column"
+          gap="3px"
+          alignItems="stretch"
+          marginBottom="20px"
+        >
+          <VisuallyHidden>
+            <input
+              type="file"
+              id={`fileInput`}
+              className="hidden"
+              accept="image/*"
+              onChange={(e) => {
+                setImage(e);
+              }}
+            />
+          </VisuallyHidden>
+          <Button onClick={handleFileButtonClick}>
+            <img src="./cms/icon_image.svg" alt="" />
+            <Typography variant="delta" textColor="neutral800">
+              Adicione fotos ao seu projeto
+            </Typography>
+          </Button>
+        </Flex>
       </Flex>
+
       <form onSubmit={handleSubmit}>
         <Flex
           gap={"50px"}
           justifyContent="space-between"
           maxWidth="500px"
-          marginTop="20px"
+          marginBottom="20px"
         >
           <Typography variant="delta" textColor="neutral800">
             Title collection
           </Typography>
+
           <TextInput
             placeholder="Collection title"
             aria-label="title"
@@ -169,7 +180,12 @@ export default function CreateCollectionTable({
           />
         </Flex>
 
-        <Flex direction="column" alignItems="stretch" gap={11}>
+        <Flex
+          direction="column"
+          alignItems="stretch"
+          gap={11}
+          marginBottom="20px"
+        >
           <DatePicker
             label="Init"
             onChange={(date: any) =>
@@ -179,7 +195,12 @@ export default function CreateCollectionTable({
           />
         </Flex>
 
-        <Flex direction="column" alignItems="stretch" gap={11}>
+        <Flex
+          direction="column"
+          alignItems="stretch"
+          gap={11}
+          marginBottom="20px"
+        >
           <DatePicker
             label="End"
             onChange={(date: any) =>
@@ -190,52 +211,60 @@ export default function CreateCollectionTable({
         </Flex>
 
         <Table colCount={4} rowCount={10}>
-          <Thead>
-            <Tr>
-              <Th></Th>
-              <Th>
-                <Typography variant="sigma">Nome</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">ID</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Ativo</Typography>
-              </Th>
-              <Th>
-                <Typography variant="sigma">Categoria</Typography>
-              </Th>
-            </Tr>
-          </Thead>
-
-          <Tbody>
-            {allProducts.map((product) => {
-              const isChecked = selectedProducts.some(
-                (p: any) => p.id === product.id
-              );
-
-              return (
-                <Tr key={product.id}>
-                  <Td>
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={(e) =>
-                        handleCheckboxChange(product, e.target.checked)
-                      }
-                    />
-                  </Td>
-                  <Td>{product?.name}</Td>
-                  <Td>{product?.id}</Td>
-                  <Td>{product?.active ? "True" : "False"}</Td>
-                  <Td>{product?.category}</Td>
+          {allProducts?.length > 0 ? (
+            <>
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  <Th>
+                    <Typography variant="sigma">Nome</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">ID</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Ativo</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Categoria</Typography>
+                  </Th>
                 </Tr>
-              );
-            })}
-          </Tbody>
+              </Thead>
+
+              <Tbody>
+                {allProducts.map((product) => {
+                  const isChecked = selectedProducts.some(
+                    (p: any) => p.id === product.id
+                  );
+
+                  return (
+                    <Tr key={product.id}>
+                      <Td>
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={(e) =>
+                            handleCheckboxChange(product, e.target.checked)
+                          }
+                        />
+                      </Td>
+                      <Td>{product?.name}</Td>
+                      <Td>{product?.id}</Td>
+                      <Td>{product?.active ? "True" : "False"}</Td>
+                      <Td>{product?.category}</Td>
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </>
+          ) : (
+            <Typography variant="sigma" padding="20px">
+              Houve um problema ao carregar os produtos
+            </Typography>
+          )}
         </Table>
 
-        <Flex alignItems="stretch" gap={11} marginBottom="20px">
+        <Flex alignItems="stretch" gap={11} marginTop="20px">
           <Button type="submit">Criar coleção</Button>
           <Button onClick={backToCollection}>retornar</Button>
         </Flex>

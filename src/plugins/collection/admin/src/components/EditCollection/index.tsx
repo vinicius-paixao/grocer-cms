@@ -12,6 +12,7 @@ import {
   Flex,
   TextInput,
   DatePicker,
+  VisuallyHidden,
 } from "@strapi/design-system";
 import { productsRequest } from "../../../../../products/admin/src/api/products";
 import axios from "axios";
@@ -27,7 +28,7 @@ interface IEditCollectionTable {
 export default function EditCollectionTable({
   collection,
   backToView,
-  update
+  update,
 }: IEditCollectionTable) {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
@@ -120,7 +121,7 @@ export default function EditCollectionTable({
 
     try {
       await axios.put(`/api/collections/${collectionInfo?.id}`, dataToSend);
-      update(true)
+      update(true);
     } catch (e) {
       console.error("error", e);
     }
@@ -163,6 +164,8 @@ export default function EditCollectionTable({
         {collectionInfo?.banner && (
           <Flex>
             <img
+              height="200px"
+              width="1200px"
               className=""
               src={`http://localhost:1337${collectionInfo?.banner}`}
               alt="Preview"
@@ -170,8 +173,13 @@ export default function EditCollectionTable({
           </Flex>
         )}
 
-        <Flex>
-          <div className="">
+        <Flex
+          direction="column"
+          gap="3px"
+          alignItems="stretch"
+          marginBottom="20px"
+        >
+          <VisuallyHidden>
             <input
               type="file"
               id={`fileInput`}
@@ -181,11 +189,14 @@ export default function EditCollectionTable({
                 setImage(e);
               }}
             />
-            <button className="" onClick={handleFileButtonClick}>
-              <img src="./cms/icon_image.svg" alt="" />
-              <p>Adicione fotos ao seu projeto</p>
-            </button>
-          </div>
+          </VisuallyHidden>
+
+          <Button onClick={handleFileButtonClick}>
+            <img src="./cms/icon_image.svg" alt="" />
+            <Typography variant="delta" textColor="neutral800">
+              Adicione fotos ao seu projeto
+            </Typography>
+          </Button>
         </Flex>
       </Flex>
 
@@ -194,7 +205,7 @@ export default function EditCollectionTable({
           gap={"50px"}
           justifyContent="space-between"
           maxWidth="500px"
-          marginTop="20px"
+          marginBottom="20px"
         >
           <Typography variant="delta" textColor="neutral800">
             id da coleção:
@@ -208,11 +219,12 @@ export default function EditCollectionTable({
           gap={"50px"}
           justifyContent="space-between"
           maxWidth="500px"
-          marginTop="20px"
+          marginBottom="20px"
         >
           <Typography variant="delta" textColor="neutral800">
             titulo
           </Typography>
+
           <TextInput
             placeholder="name brand"
             aria-label="name"
@@ -222,7 +234,12 @@ export default function EditCollectionTable({
           />
         </Flex>
 
-        <Flex direction="column" alignItems="stretch" gap={11}>
+        <Flex
+          direction="column"
+          alignItems="stretch"
+          gap={11}
+          marginBottom="20px"
+        >
           <DatePicker
             label="inicio"
             onChange={(date: any) => {
@@ -292,7 +309,7 @@ export default function EditCollectionTable({
             })}
           </Tbody>
         </Table>
-        <Flex alignItems="stretch" gap={11} marginBottom="20px">
+        <Flex alignItems="stretch" gap={11} marginTop="20px">
           <Button type="submit">Atualizar coleção</Button>
           <Button onClick={backToView}>Voltar para visualização</Button>
         </Flex>

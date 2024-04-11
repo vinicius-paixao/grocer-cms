@@ -18,98 +18,106 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async findOne(id) {
+  async findOne(id: any, auth: any) {
     try {
-      const response = await axios.get(`${baseUrl}/${id}`, { headers: defaultHeaders });
+      const response = await axios.get(`${baseUrl}/${id}`, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async findByName(name: string) {
+  async findByName(name: string, auth: any) {
     try {
-      const response = await axios.get(`${baseUrl}/search?name=${name}`, { headers: defaultHeaders });
+      const response = await axios.get(`${baseUrl}/search?name=${name}`, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async create(body) {
+  async create(body: any, auth: any) {
     try {
-      const response = await axios.post(`${baseUrl}`, body, { headers: defaultHeaders });
+      const response = await axios.post(`${baseUrl}`, body, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
 
       console.log('Dados recebidos:', body);
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async update(body, id) {
+  async update(body: any, id: any, auth: any) {
     try {
-      const response = await axios.put(`${baseUrl}/${id}`, body, { headers: defaultHeaders });
+      const response = await axios.put(`${baseUrl}/${id}`, body, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
       console.log('update:', body);
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async updateFieldEnable(body, id) {
+  async updateFieldEnable(body: any, id: any, auth: any) {
     try {
-      const response = await axios.patch(`${baseUrl}/${id}`, body, { headers: defaultHeaders });
+      const response = await axios.patch(`${baseUrl}/${id}`, body, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
       console.log('update:', body);
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async updateFieldDesable(body, id) {
+  async updateFieldDesable(body: any, id: any, auth: any) {
     try {
-      const response = await axios.patch(`${baseUrl}/${id}`, body, { headers: defaultHeaders });
+      const response = await axios.patch(`${baseUrl}/${id}`, body, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
       console.log('update:', body);
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   },
 
-  async delete(id: any) {
+  async delete(id: any, auth: any) {
     try {
-      const response = await axios.delete(`${baseUrl}/${id}`, { headers: defaultHeaders });
+      const response = await axios.delete(`${baseUrl}/${id}`, { headers: { ...defaultHeaders, Authorization: auth } });
       const productResponse = response.data;
       console.log('delete:', id);
 
       return productResponse;
     } catch (error) {
-      const { status, statusText } = error.response
-      console.error('Ocorreu um erro ao tentar obter os dados:', { status, statusText });
+      const { status, title, detail } = error.response.data
+      console.error('Ocorreu um erro ao tentar obter os dados:', { status, title, detail });
+      return { status, title, detail }
     }
   }
 });
