@@ -29,7 +29,7 @@ const Collection: FC = () => {
 
       setAllCollections(collection.data);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -50,7 +50,7 @@ const Collection: FC = () => {
 
       setCollection(collection.data);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 

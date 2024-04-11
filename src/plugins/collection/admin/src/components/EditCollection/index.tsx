@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
 import {
   Box,
   Button,
@@ -47,21 +46,13 @@ export default function EditCollectionTable({
 
       setAllProducts(allProducts);
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  // const getError = () => {
-  //   // if (name?.length > 40) {
-  //   //   return "Content is too long";
-  //   // }
-
-  //   return null;
-  // };
 
   useEffect(() => {
     if (collection) {
@@ -131,7 +122,7 @@ export default function EditCollectionTable({
       await axios.put(`/api/collections/${collectionInfo?.id}`, dataToSend);
       update(true)
     } catch (e) {
-      console.log("error", e);
+      console.error("error", e);
     }
   };
 
@@ -146,7 +137,6 @@ export default function EditCollectionTable({
       const response = await axios.post("/api/upload", formData);
       const data = response.data;
       setCollectionInfo({ ...collectionInfo, banner: data });
-      console.log({ data });
     } catch (error) {
       console.error(error);
     }
