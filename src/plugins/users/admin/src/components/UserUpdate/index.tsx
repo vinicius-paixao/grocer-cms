@@ -1,4 +1,4 @@
-import  {  useState } from "react";
+import { useState } from "react";
 import {
   ModalLayout,
   ModalHeader,
@@ -14,7 +14,7 @@ import { usersRequest } from "../../api/users";
 import { IAdmin } from "../../types/clientes";
 
 interface IUpdateUser {
-  users: IAdmin
+  users: IAdmin;
   setShowUpdateModal: (value: boolean) => void;
   userEdit: boolean;
   token?: string;
@@ -36,13 +36,6 @@ export default function UpdateUser({
   });
 
   const authToken = localStorage.getItem("token");
-
-  // const handleEdit = (fieldName: any, value: any) => {
-  //   setUserData((prevData) => ({
-  //     ...prevData,
-  //     [fieldName]: value,
-  //   }));
-  // };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -70,7 +63,7 @@ export default function UpdateUser({
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Update User
+          Atualizar Informações
         </Typography>
       </ModalHeader>
 
@@ -142,7 +135,7 @@ export default function UpdateUser({
             Cancelar
           </Button>
         }
-        endActions={<Button type="submit">atualizar Usuario</Button>}
+        endActions={<Button type="submit">Atualizar Informações</Button>}
       />
     </ModalLayout>
   );

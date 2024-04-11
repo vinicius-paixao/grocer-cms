@@ -34,7 +34,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = loginEmailCode.status
+      ctx.status = loginEmailCode.status ?? 200
       ctx.body = loginEmailCode
     } catch (error) {
       ctx.throw(500, error);
@@ -54,7 +54,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = loginEmail.login
+      ctx.status = loginEmail.login ?? 200
       ctx.body = loginEmail
     } catch (error) {
       ctx.throw(500, error);
@@ -74,7 +74,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = loginSmsCode.status
+      ctx.status = loginSmsCode.status ?? 200
       ctx.body = loginSmsCode
     } catch (error) {
       ctx.throw(500, error);
@@ -94,7 +94,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'sucesso',
       });
 
-      ctx.status = loginSms.status;
+      ctx.status = loginSms.status ?? 200
       ctx.body = loginSms
     } catch (error) {
       ctx.throw(500, error);
@@ -115,13 +115,11 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('loginService')
         .loginAsAdmin(requestData, authToken);
 
-      console.log(loginAsAdmin)
-
       ctx.send({
         message: 'sucesso',
       });
 
-      ctx.status = loginAsAdmin.status;
+      ctx.status = loginAsAdmin.status ?? 200
       ctx.body = loginAsAdmin
     } catch (error) {
       ctx.throw(500, error);

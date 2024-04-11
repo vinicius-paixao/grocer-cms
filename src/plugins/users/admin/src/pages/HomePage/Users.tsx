@@ -11,6 +11,8 @@ import {
   TabPanels,
   TabPanel,
   Box,
+  Typography,
+  Flex,
 } from "@strapi/design-system";
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import UsersTable from "../../components/UsersTable";
@@ -21,6 +23,7 @@ import AllUsers from "../../components/AllUsers";
 import AddUser from "../../components/AddUser";
 import LoginModal from "../../../../../login/admin/src/components/LoginModal";
 import { IAdmin, IClients } from "../../types/clientes";
+import Modal from "../../components/Modal";
 
 const ProductCollection: FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -28,10 +31,12 @@ const ProductCollection: FC = () => {
   const [users, setUsers] = useState<IAdmin>({} as IAdmin);
   const [allClients, setAllClients] = useState<IClients[]>([]);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const [showModalError, setShowModalError] = useState(false);
   const [userEdit, setUserEdit] = useState({} as any);
   const [token, setToken] = useState("");
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({} as any);
   const [changeTitle, setChangeTitle] = useState({
     title: "Informações do usuario",
     description: "informaçoes do usuario gerente da conta.",
@@ -71,9 +76,7 @@ const ProductCollection: FC = () => {
   }, [reload]);
 
   const handleUserInfoEdit = async (id: string, user: any) => {
-    setShowModalUpdate(true);
     setUserEdit(user);
-    setLoading(true);
 
     const body = {
       contractAccountId: id,
@@ -82,14 +85,21 @@ const ProductCollection: FC = () => {
     try {
       const usersAsAdmin = await loginRequest.loginAsAdmin(body, authToken);
       setToken(usersAsAdmin.token);
-      setLoading(false);
-    } catch (e) {
+      setShowModalUpdate(true);
+    } catch (e: any) {
       setShowModalUpdate(false);
-      setLoading(false);
-      console.log("error", e);
+      console.error("error", e.response.payload);
+      setError(e.response.payload);
     }
   };
-  console.log({ reload });
+
+  useEffect(() => {
+    if (error?.status) {
+      error?.status == 500 && setShowModalError(true);
+    }
+  }, [error]);
+
+  console.log({ error });
 
   if (loading) return <LoadingIndicatorPage />;
 
@@ -97,6 +107,23 @@ const ProductCollection: FC = () => {
     <Layout>
       {authToken ? (
         <>
+          {showModalError && (
+            <Modal
+              title="Ocorreu um erro"
+              setShowModal={setShowModalError}
+              children={
+                <Flex alignItems="center" gap={11}>
+                  <Typography
+                    textColor="danger600"
+                    lineHeight="20px"
+                    fontSize="10px"
+                  >
+                    {error?.detail || error?.error?.message}
+                  </Typography>
+                </Flex>
+              }
+            />
+          )}
           {showModal && (
             <UserUpdate
               setShowUpdateModal={setShowModal}
@@ -115,7 +142,7 @@ const ProductCollection: FC = () => {
           {showAddModal && (
             <AddUser
               setShowAddModal={setShowAddModal}
-              hasReload={() =>setReload(true)}
+              hasReload={() => setReload(true)}
             />
           )}
           <BaseHeaderLayout

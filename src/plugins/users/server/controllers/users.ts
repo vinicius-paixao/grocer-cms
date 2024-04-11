@@ -10,6 +10,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('usersService')
         .findAll(authToken)
 
+      ctx.status = allusers.status ?? 200
       ctx.body = allusers
     } catch (error) {
       ctx.throw(500, error);
@@ -25,6 +26,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('usersService')
         .findCurrentUser(authToken)
 
+      ctx.status = allusers.status ?? 200
       ctx.body = allusers
     } catch (error) {
       ctx.throw(500, error);
@@ -41,12 +43,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('usersService')
         .update(requestData, authToken);
 
-      ctx.status = 200
-      ctx.body = updateUser
-
       ctx.send({
         message: 'user atualizado com sucesso',
       });
+
+      ctx.status = updateUser.status ?? 200
+      ctx.body = updateUser
     } catch (error) {
       ctx.throw(500, error);
     }
@@ -63,12 +65,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('usersService')
         .passwrdRecovery(requestData, id, authToken);
 
-      ctx.status = 200
-      ctx.body = passwrdRecoveryUser
-
       ctx.send({
         message: 'user atualizado com sucesso',
       });
+
+      ctx.status = ctx.status = passwrdRecoveryUser.status ?? 200
+      ctx.body = passwrdRecoveryUser
     } catch (error) {
       ctx.throw(500, error);
     }
@@ -85,12 +87,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         .service('usersService')
         .passwrdChange(requestData, id, authToken);
 
-      ctx.status = 200
-      ctx.body = passwrdChangeUser
-
       ctx.send({
         message: 'user atualizado com sucesso',
       });
+
+      ctx.status = ctx.status = passwrdChangeUser.status ?? 200
+      ctx.body = passwrdChangeUser
     } catch (error) {
       ctx.throw(500, error);
     }
@@ -110,7 +112,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = signupUsers.status ?? 200
       ctx.body = signupUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -131,7 +133,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = checkEmailUsers.status ?? 200
       ctx.body = checkEmailUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -152,7 +154,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = checkDocumentUsers.status ?? 200
       ctx.body = checkDocumentUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -173,7 +175,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = checkPhoneUsers.status ?? 200
       ctx.body = checkPhoneUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -194,7 +196,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = passwrdResetUsers.status ?? 200
       ctx.body = passwrdResetUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -215,7 +217,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = passwrdResetCodeUsers.status ?? 200
       ctx.body = passwrdResetCodeUsers
     } catch (error) {
       ctx.throw(500, error);
@@ -236,7 +238,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         message: 'User criado com sucesso',
       });
 
-      ctx.status = 200
+      ctx.status = ctx.status = userEditUsers.status ?? 200
       ctx.body = userEditUsers
     } catch (error) {
       ctx.throw(500, error);
