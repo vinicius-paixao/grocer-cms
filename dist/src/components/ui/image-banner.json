@@ -1,0 +1,26 @@
+{
+    "collectionName": "components_ui_image_banners",
+    "info": {
+        "displayName": "ImageBanner",
+        "icon": "puzzle"
+    },
+    "options": {},
+    "attributes": {
+        "position": {
+            "type": "string"
+        },
+        "image": {
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ],
+            "type": "media",
+            "multiple": false
+        },
+        "link": {
+            "type": "string"
+        }
+    }
+}

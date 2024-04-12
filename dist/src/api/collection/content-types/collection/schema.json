@@ -1,0 +1,35 @@
+{
+    "kind": "collectionType",
+    "collectionName": "collections",
+    "info": {
+        "singularName": "collection",
+        "pluralName": "collections",
+        "displayName": "collection",
+        "description": ""
+    },
+    "options": {
+        "draftAndPublish": false
+    },
+    "pluginOptions": {
+        "content-manager": {
+            "visible": false
+        }
+    },
+    "attributes": {
+        "title": {
+            "type": "string"
+        },
+        "init": {
+            "type": "date"
+        },
+        "end": {
+            "type": "date"
+        },
+        "products": {
+            "type": "json"
+        },
+        "banner": {
+            "type": "json"
+        }
+    }
+}
