@@ -64,8 +64,8 @@ export default function EditCollectionTable({
         end: collection.attributes.end,
         products: collection.attributes.products || [],
         banner: collection?.attributes?.banner
-          ? collection?.attributes?.banner[0]?.url
-          : [],
+          ? collection?.attributes?.banner
+          : null,
       });
     }
   }, [collection]);
@@ -148,6 +148,8 @@ export default function EditCollectionTable({
 
     fileInput.click();
   };
+
+  console.log({collectionInfo, collection})
 
   return (
     <Box

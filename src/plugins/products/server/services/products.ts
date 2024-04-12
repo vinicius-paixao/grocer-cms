@@ -5,7 +5,8 @@ import axios from 'axios';
 const defaultHeaders = {
   'content-type': 'application/json',
   accept: 'application/json',
-  Authorization: `bearer ${process.env.PLUGIN_TOKEN}`,
+  // Authorization: `bearer ${process.env.PLUGIN_TOKEN}`,
+  'x-contractAccountId': '11c1fa10-1e44-4649-b681-c81f7554afab'
 };
 
 const baseUrl = 'https://grocers-io.azurewebsites.net/v1/products'

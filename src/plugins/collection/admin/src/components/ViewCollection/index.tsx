@@ -42,7 +42,7 @@ export default function CollectionViewTable({
               height="200px"
               width="1200px"
               className=""
-              src={`http://localhost:1337${collection?.attributes?.banner[0]?.url}`}
+              src={`http://localhost:1337${collection?.attributes?.banner}`}
               alt="Preview"
             />
           </Flex>
