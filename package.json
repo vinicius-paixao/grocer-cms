@@ -8,7 +8,6 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "prebuild": "cd src/plugins/<plugin name> && npm run build",
     "release": "standard-version"
   },
   "dependencies": {
